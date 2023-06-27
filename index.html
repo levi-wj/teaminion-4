@@ -4,9 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teaminion</title>
+    <script type="module">
+      import Matches from '/src/Matches.svelte';
+      import { getCurrentMatchID } from '/src/js/model/matches.js';
+
+      new Matches({
+        target: document.getElementById('main')
+      });
+
+      if ((await getCurrentMatchID()) !== null) {
+        window.location.href = '/src/game.html';
+      }
+    </script>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <main id="main"></main>
   </body>
 </html>
