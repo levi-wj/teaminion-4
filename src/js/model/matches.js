@@ -16,30 +16,37 @@ const matchData = {
     playerTurn: playerID,
 };
 
+// create a new match
 export const createMatch = async () => {
-    const gamesRef = ref(db, 'matches');
+    const matchesRef = ref(db, 'matches');
     console.log('Creating match', matchData);
-    await set(push(gamesRef), matchData);
+    await set(push(matchesRef), matchData);
     window.location.href = '/src/game.html';
 }
 
+// listens to existing matches
+// if existing match data changes, pass match data to callback function
 export const addMatchListener = cb => {
-    const gamesRef = ref(db, 'matches');
-    onValue(gamesRef, (res) => {
+    const matchesRef = ref(db, 'matches');
+    onValue(matchesRef, (res) => {
         const data = res.val();
         cb(data);
     });
 }
 
+// returns active matches in the database
+// TODO: this will grab all joinable matches from the db
 export const getOpenMatches = async () => {
-    const gamesRef = ref(db, 'matches');
-    const data = (await get(gamesRef)).val();
+    const matchesRef = ref(db, 'matches');
+    const data = (await get(matchesRef)).val();
     return data;
 }
 
+// insert a player's id into a match
+// initializes player's deck
 export const joinMatch = async (matchID) => {
-    const gamesRef = ref(db, 'matches');
-    const matchRef = child(gamesRef, matchID);
+    const matchesRef = ref(db, 'matches');
+    const matchRef = child(matchesRef, matchID);
     const match = (await get(matchRef)).val();
     const playerCount = getPlayerCount(match);
     if (playerCount < 4) {
@@ -61,13 +68,16 @@ export const joinMatch = async (matchID) => {
     }
 }
 
+// get number of players in a match
 export const getPlayerCount = (match) => {
     return Object.keys(match.players).length;
 }
 
+// if a player's id already exists in a match, direct them to that match
+// make all other matches unavailable
 export const getCurrentMatchID = async () => {
-    const gamesRef = ref(db, 'matches');
-    const data = (await get(gamesRef)).val();
+    const matchesRef = ref(db, 'matches');
+    const data = (await get(matchesRef)).val();
     const matches = Object.entries(data);
     matches.forEach(([id, match]) => {
         if (match.players && match.players[playerID]) {
