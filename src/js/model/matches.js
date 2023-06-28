@@ -77,13 +77,14 @@ export const getPlayerCount = (match) => {
 // make all other matches unavailable
 export const getCurrentMatchID = async () => {
     const matchesRef = ref(db, 'matches');
-    const data = (await get(matchesRef)).val();
-    const matches = Object.entries(data);
-    matches.forEach(([id, match]) => {
+    const data = await get(matchesRef)
+    const matches = data.val();
+    for (const matchID in matches) {
+        const match = matches[matchID];
         if (match.players && match.players[playerID]) {
-            console.log('Player is in match', id);
-            return id;
+            console.log('Player is in match', matchID);
+            return matchID;
         }
-    });
+    }
     return null;
 }

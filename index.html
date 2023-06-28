@@ -12,9 +12,12 @@
         target: document.getElementById('main')
       });
 
-      if ((await getCurrentMatchID()) !== null) {
-        window.location.href = '/src/game.html';
-      }
+      getCurrentMatchID().then(id => {
+        console.log('got id', id);
+        if (id !== null) {
+          window.location.href = '/src/game.html';
+        }
+      });
     </script>
   </head>
   <body>
