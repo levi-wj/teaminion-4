@@ -3,11 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teaminion</title>
+    <title>Teaminion Game</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module">
+      import Game from './components/Game.svelte';
+
+      new Game({
+        target: document.getElementById('main')
+      });
+    </script>
   </head>
   <body>
-    <main id="main">TODO: game goes here
-      
-    </main>
+    <main id="main"></main>
   </body>
 </html>
