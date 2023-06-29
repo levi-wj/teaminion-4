@@ -2,25 +2,23 @@ import { db, playerID } from "../firebase";
 import { ref, onValue, set, update, push, get, orderByKey, equalTo, child } from "firebase/database";
 import { getQuantities } from '../cards.js';
 
-const matchData = {
-    started: false,
-    cardsLeft: getQuantities(),
-    players: {
-        [playerID]: {
-            deck: {
-                copper: 7,
-                estate: 3,
-            },
-        },
-    },
-    playerTurn: playerID,
-};
-
 // create a new match
 export const createMatch = async () => {
+    const newMatchData = {
+        started: false,
+        cardsLeft: getQuantities(),
+        players: {
+            [playerID]: {
+                nickname: localStorage.getItem('nickname'),
+                isLeader: true,
+            },
+        },
+        playerTurn: playerID,
+    };
+
     const matchesRef = ref(db, 'matches');
-    console.log('Creating match', matchData);
-    await set(push(matchesRef), matchData);
+    console.log('Creating match', newMatchData);
+    await set(push(matchesRef), newMatchData);
     window.location.href = '/src/game.html';
 }
 
@@ -43,24 +41,19 @@ export const getOpenMatches = async () => {
 }
 
 // insert a player's id into a match
-// initializes player's deck
 export const joinMatch = async (matchID) => {
-    const matchesRef = ref(db, 'matches');
-    const matchRef = child(matchesRef, matchID);
+    const nickname = localStorage.getItem('nickname');
+    const matchRef = ref(db, `matches/${matchID}`);
     const match = (await get(matchRef)).val();
     const playerCount = getPlayerCount(match);
-    if (playerCount < 4) {
+
+    if (playerCount < 4 && !match.started) {
         console.log(`${playerID} is joining match`, match);
         const playerRef = child(matchRef, 'players');
-        const player = {
-            [playerID]: {
-                deck: {
-                    copper: 7,
-                    estate: 3,
-                },
-            },
+        const players = {
+            [playerID]: { nickname }
         };
-        update(playerRef, player);
+        update(playerRef, players);
         window.location.href = '/src/game.html';
         return true;
     } else {
@@ -87,4 +80,8 @@ export const getCurrentMatchID = async () => {
         }
     }
     return null;
+}
+
+export const isPlayerLeader = (match) => {
+    return match.players[playerID].isLeader === true;
 }
