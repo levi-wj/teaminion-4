@@ -29,3 +29,9 @@
         <GameLobby {matchID} {matchData} />
     {/if}
 {/if}
+
+<style>
+    main {
+        background-color: var(--secondary-light);
+    }
+</style>

@@ -85,6 +85,7 @@ export const cardList = {
         cost: 5,
         type: "action",
         quantity: 10,
+        image: "mine.jpg",
     },
     moat: {
         name: "Moat",

@@ -8,8 +8,10 @@
     {#each Object.entries(players) as [id, player]}
         {#if id == playerTurn}
             <div class="player player--current">
-                <div class="player__gold">Gold: {player.gold ?? 0}</div>
-                <div class="player__actions">Actions: {player.actions ?? 0}</div>
+                <div class="player__items">
+                    <div><i class="fa fa-bolt"></i> - {player.actions ?? 0}</div>
+                    <div><i class="fa fa-sack-dollar"></i> - {player.gold ?? 0}</div>
+                </div>
                 <div class="player__name">{player.nickname}</div>
             </div>
         {:else}
@@ -23,33 +25,37 @@
 
 <style>
     .header {
-        padding: .25em;
-        padding-top: 0;
-        margin: 0;
         display: flex;
+        align-items: flex-start;
         justify-content: space-around;
     }
 
     .player {
-        background-color: rgb(25, 25, 112);
-        padding: .5em 3em 1em 3em;
+        background-color: var(--primary-dark);
+        box-shadow: 0 5px 25px var(--primary-dark);
+        padding: 1em 0;
+        text-align: center;
+        width: 10em;
         color: white;
         border-radius: 0 0 12px 12px;
-        height: 1em;
     }
 
-    .player.player--current {
-        height: 3.25em;
-        box-shadow: 0 5px 25px rgb(79, 128, 207);
+    .player--current {
+        background-color: var(--primary);
+        padding: 1.4em 0;
+        box-shadow: 0 5px 25px var(--primary);
+        font-weight: 600;
     }
 
-    .player__actions {
-        margin-bottom: .25em;
+    .player__items {
+        padding-bottom: .4em;
+    }
+    .player__items div {
+        display: inline;
+        padding: 0 .4em;
     }
 
     .player__name {
-        font-size: 1.2em;
-        font-weight: 200;
-        text-align: center;
+        font-size: var(--step-1);
     }
 </style>
