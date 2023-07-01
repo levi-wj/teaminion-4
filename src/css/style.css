@@ -1,4 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Bellefair&family=IM+Fell+Great+Primer+SC&display=swap');
+
+:root {
+    --heading-font: "IM Fell Great Primer SC", Helvetica, Arial, sans-serif;
+    --body-font: "Bellefair", Arial, Helvetica, sans-serif;
+    --base-font-size: 22px;
+    --primary-dark: rgb(27, 94, 203);
+    --primary: rgb(84, 147, 248);
+    --primary-light: rgb(199, 220, 255);
+    --secondary-dark: rgb(107, 205, 47);
+    --secondary: rgb(165, 236, 121);
+    --secondary-light: rgb(216, 252, 196);
+    --black: rgb(31, 31, 31);
+    --gray-dark: rgb(144, 144, 144);
+    --gray-light: rgb(208, 208, 208);
+    /* filter: --lighter; */
+    --lighter: saturate(50%):
+    --step--2: clamp(0.87rem, calc(0.86rem + 0.02vw), 0.88rem);
+    --step--1: clamp(1.04rem, calc(1.02rem + 0.10vw), 1.10rem);
+    --step-0: clamp(1.25rem, calc(1.21rem + 0.22vw), 1.38rem);
+    --step-1: clamp(1.50rem, calc(1.42rem + 0.38vw), 1.72rem);
+    --step-2: clamp(1.80rem, calc(1.68rem + 0.61vw), 2.15rem);
+    --step-3: clamp(2.16rem, calc(1.98rem + 0.91vw), 2.69rem);
+    --step-4: clamp(2.59rem, calc(2.33rem + 1.33vw), 3.36rem);
+    --step-5: clamp(3.11rem, calc(2.73rem + 1.89vw), 4.20rem);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: var(--base-font-size);
+    color: var(--black);
+}
+
 body {
+    background-color: var(--secondary-light);
     margin: 0;
     padding: 0;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+}
+h1 {
+ font-size: var(--step-4);
+}
+h2 {
+    font-size: var(--step-3);
+}
+h3 {
+    font-size: var(--step-2);
+}
+h4, h5, h6 {
+    font-size: var(--step-1);
+}
+
+body, p, button, input {
+    font-size: var(--step-0);
+    font-family: var(--body-font);
+}
+
+button {
+    background-color: var(--secondary);
+    border-radius: .6em;
+    border: none;
+    min-height: 45px;
+    min-width: 6.5em;
+    padding: .4em;
+}
+
+/* base card style! */
+/* .card {
+    border-radius: .4em;
+    border: 10px solid black;
+} */
