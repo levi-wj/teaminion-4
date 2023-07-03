@@ -3,7 +3,7 @@
 :root {
     --heading-font: "IM Fell Great Primer SC", Helvetica, Arial, sans-serif;
     --body-font: "Bellefair", Arial, Helvetica, sans-serif;
-    --base-font-size: 22px;
+    --base-font-size: 12px;
     --primary-dark: rgb(27, 94, 203);
     --primary: rgb(84, 147, 248);
     --primary-light: rgb(199, 220, 255);
@@ -66,8 +66,13 @@ button {
     border-radius: .3em;
     border: none;
     min-height: 45px;
-    min-width: 5.5em;
-    padding: .2em;
+    min-width: 6.5em;
+    padding: .4em;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(.9);
 }
 
 .actionTop {

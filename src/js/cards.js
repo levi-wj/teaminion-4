@@ -1,6 +1,8 @@
-export const cardList = {
+import { drawCard } from "./model/game";
+
+export const cardList = [
     // Treasure cards
-    copper: {
+    {
         name: "Copper",
         cost: 0,
         type: "treasure",
@@ -8,7 +10,7 @@ export const cardList = {
         quantity: 60,
         image: "/src/images/copper.jpg"
     },
-    silver: {
+    {
         name: "Silver",
         cost: 3,
         type: "treasure",
@@ -16,7 +18,7 @@ export const cardList = {
         quantity: 40,
         image: "/src/images/silver.jpg"
     },
-    gold: {
+    {
         name: "Gold",
         cost: 6,
         type: "treasure",
@@ -26,7 +28,7 @@ export const cardList = {
     },
 
     // Victory cards
-    estate: {
+    {
         name: "Estate",
         cost: 2,
         type: "victory",
@@ -34,7 +36,7 @@ export const cardList = {
         quantity: 24,
         image: "/src/images/estate.jpg"
     },
-    duchy: {
+    {
         name: "Duchy",
         cost: 5,
         type: "victory",
@@ -42,7 +44,7 @@ export const cardList = {
         quantity: 12,
         image: "/src/images/duchy.jpg"
     },
-    province: {
+    {
         name: "Province",
         cost: 8,
         type: "victory",
@@ -52,77 +54,95 @@ export const cardList = {
     },
 
     // Action cards
-    cellar: {
+    { // 6
         name: "Cellar",
         cost: 2,
         type: "action",
         quantity: 10,
         image: "/src/images/cellar.jpg"
     },
-    market: {
+    { // 7
         name: "Market",
         cost: 5,
         type: "action",
         quantity: 10,
         image: "/src/images/market.jpg"
     },
-    merchant: {
+    { // 8
         name: "Merchant",
         cost: 3,
         type: "action",
         quantity: 10,
         image: "/src/images/merchant.jpg"
     },
-    militia: {
+    { // 9
         name: "Militia",
         cost: 4,
         type: "action",
         quantity: 10,
         image: "/src/images/militia.jpg"
     },
-    mine: {
+    { // 10
         name: "Mine",
         cost: 5,
         type: "action",
         quantity: 10,
         image: "/src/images/mine.jpg",
     },
-    moat: {
+    { // 11
         name: "Moat",
         cost: 2,
         type: "action",
         quantity: 10,
         image: "/src/images/moat.jpg"
     },
-    remodel: {
+    { // 12
         name: "Remodel",
         cost: 4,
         type: "action",
         quantity: 10,
         image: "/src/images/remodel.jpg"
     },
-    smithy: {
+    { // 13
         name: "Smithy",
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "/src/images/smithy.jpg"
+        image: "/src/images/smithy.jpg",
+        action: (matchID, matchData, player) => {
+            for (let i = 0; i < 3; i++) {
+                drawCard(player);
+            }
+        },
     },
-    village: {
+    { // 14
         name: "Village",
         cost: 3,
         type: "action",
         quantity: 10,
         image: "/src/images/village.jpg"
     },
-    workshop: {
+    { // 15
         name: "Workshop",
         cost: 3,
         type: "action",
         quantity: 10,
         image: "/src/images/workshop.jpg"
     },
+];
+
+const getCardID = (cardName) => {
+    return cardList.findIndex(card => card.name === cardName);
 }
+
+const copperID = getCardID('Copper');
+const estateID = getCardID('Estate');
+export const startingDeck = [
+     // Seven Coppers
+    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+    // Three Estates
+    estateID, estateID, estateID,
+];
 
 export const getQuantities = () => {
     const quantities = {};

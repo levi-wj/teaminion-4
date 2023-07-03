@@ -38,6 +38,7 @@
         width: 10em;
         color: white;
         border-radius: 0 0 12px 12px;
+        font-size: var(--step--1);
     }
 
     .player--current {

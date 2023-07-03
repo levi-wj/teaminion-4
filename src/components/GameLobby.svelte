@@ -17,7 +17,7 @@
 {#if isPlayerLeader(matchData)}
     <h3>You are the match leader</h3>
     {#if isGameStartable(matchData)}
-        <button on:click={e => startGame(matchID)}>Start Game</button>
+        <button on:click={e => startGame(matchID, matchData)}>Start Game</button>
     {:else}
         <p>You need at least 2 players to start the game</p>
     {/if}

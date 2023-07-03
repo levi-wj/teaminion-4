@@ -13,7 +13,6 @@ export const createMatch = async () => {
                 isLeader: true,
             },
         },
-        playerTurn: playerID,
     };
 
     const matchesRef = ref(db, 'matches');
@@ -70,7 +69,7 @@ export const getPlayerCount = (match) => {
 // make all other matches unavailable
 export const getCurrentMatchID = async () => {
     const matchesRef = ref(db, 'matches');
-    const data = await get(matchesRef)
+    const data = await get(matchesRef);
     const matches = data.val();
     for (const matchID in matches) {
         const match = matches[matchID];
