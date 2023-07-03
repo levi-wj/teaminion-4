@@ -1,14 +1,27 @@
 <script>
-    import { addMatchListener, createMatch, joinMatch, getPlayerCount } from "../js/model/matches";
+    import { addMatchListener, createMatch, joinMatch } from "../js/model/matches";
     import { cardList } from "../js/cards";
 
     // initialize array for matches and current match data
     let matches = [];
+    let nicknameBox;
     addMatchListener(data => matches = data);
 
     // set player nickname to local storage
     function setNickname(e) {
         localStorage.setItem('nickname', e.target.value);
+    }
+
+    function checkNicknameAndJoin(matchID) {
+        if (nicknameBox.reportValidity() === true) {
+            joinMatch(matchID);
+        }
+    }
+
+    function checkNicknameAndCreate() {
+        if (nicknameBox.reportValidity() === true) {
+            createMatch();
+        }
     }
 
     // open and close view cards dialog
@@ -25,13 +38,13 @@
 <main>
     <div class="header">
         <label for="nickname">Nickname:</label>
-        <input type="text" id="nickname" name="nickname" value={localStorage.getItem('nickname')} on:change={setNickname}>
+        <input type="text" id="nickname" name="nickname" value={localStorage.getItem('nickname')} bind:this={nicknameBox} on:change={setNickname} required>
     </div>
 
     <div class="matches">
         <h1>Games</h1>
         <!-- create match button -->
-        <button on:click={createMatch}>Create match</button>
+        <button on:click={checkNicknameAndCreate}>Create match</button>
         {#if matches}
             {#if matches.length === 0}
                 <p>No open matches</p>
@@ -42,11 +55,11 @@
                         <div>
                             Players:
                             {#each Object.entries(match.players) as [id, player]}
-                                {player.nickname}
+                                <span>{player.nickname} </span>
                             {/each}
                         </div>
                         <div>
-                            <button on:click={() => joinMatch(id)}>Join</button>
+                            <button on:click={() => checkNicknameAndJoin(id)}>Join</button>
                             <button on:click={showCards}><i class="fa-solid fa-window-restore"></i></button>
                         </div>
 
@@ -54,9 +67,9 @@
                         <dialog id="cardSet">
                             <i class="fa fa-x" on:click={hideCards}></i>
                             <div>
-                                {#each Object.entries(match.cardsLeft) as [card]}
-                                    {#if cardList[card].type === 'action'}
-                                        <img src={`/src/images/${cardList[card].image}`} alt="{card}">
+                                {#each match.cardsLeft as card, id}
+                                    {#if cardList[id].type === 'action'}
+                                        <img src={`/src/images/${cardList[id].image}`} alt="{card}">
                                     {/if}
                                 {/each}
                             </div>
