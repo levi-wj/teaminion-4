@@ -7,6 +7,7 @@
 </script>
 
 <h2>Players</h2>
+
 <ul>
     {#each Object.entries(matchData.players) as [id, player]}
         <li>{player.nickname} {#if player.isLeader} (leader){/if}</li>
