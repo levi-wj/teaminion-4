@@ -6,7 +6,7 @@ export const cardList = {
         type: "treasure",
         value: 1,
         quantity: 60,
-        image: "copper.jpg"
+        image: "/src/images/copper.jpg"
     },
     silver: {
         name: "Silver",
@@ -14,7 +14,7 @@ export const cardList = {
         type: "treasure",
         value: 2,
         quantity: 40,
-        image: "silver.jpg"
+        image: "/src/images/silver.jpg"
     },
     gold: {
         name: "Gold",
@@ -22,7 +22,7 @@ export const cardList = {
         type: "treasure",
         value: 3,
         quantity: 30,
-        image: "gold.jpg"
+        image: "/src/images/gold.jpg"
     },
 
     // Victory cards
@@ -32,7 +32,7 @@ export const cardList = {
         type: "victory",
         value: 1,
         quantity: 24,
-        image: "estate.jpg"
+        image: "/src/images/estate.jpg"
     },
     duchy: {
         name: "Duchy",
@@ -40,7 +40,7 @@ export const cardList = {
         type: "victory",
         value: 3,
         quantity: 12,
-        image: "duchy.jpg"
+        image: "/src/images/duchy.jpg"
     },
     province: {
         name: "Province",
@@ -48,7 +48,7 @@ export const cardList = {
         type: "victory",
         value: 6,
         quantity: 12,
-        image: "province.jpg"
+        image: "/src/images/province.jpg"
     },
 
     // Action cards
@@ -57,70 +57,70 @@ export const cardList = {
         cost: 2,
         type: "action",
         quantity: 10,
-        image: "cellar.jpg"
+        image: "/src/images/cellar.jpg"
     },
     market: {
         name: "Market",
         cost: 5,
         type: "action",
         quantity: 10,
-        image: "market.jpg"
+        image: "/src/images/market.jpg"
     },
     merchant: {
         name: "Merchant",
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "merchant.jpg"
+        image: "/src/images/merchant.jpg"
     },
     militia: {
         name: "Militia",
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "militia.jpg"
+        image: "/src/images/militia.jpg"
     },
     mine: {
         name: "Mine",
         cost: 5,
         type: "action",
         quantity: 10,
-        image: "mine.jpg",
+        image: "/src/images/mine.jpg",
     },
     moat: {
         name: "Moat",
         cost: 2,
         type: "action",
         quantity: 10,
-        image: "moat.jpg"
+        image: "/src/images/moat.jpg"
     },
     remodel: {
         name: "Remodel",
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "remodel.jpg"
+        image: "/src/images/remodel.jpg"
     },
     smithy: {
         name: "Smithy",
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "smithy.jpg"
+        image: "/src/images/smithy.jpg"
     },
     village: {
         name: "Village",
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "village.jpg"
+        image: "/src/images/village.jpg"
     },
     workshop: {
         name: "Workshop",
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "workshop.jpg"
+        image: "/src/images/workshop.jpg"
     },
 }
 

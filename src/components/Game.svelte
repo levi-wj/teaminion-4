@@ -7,7 +7,7 @@
 
     let matchID = '';
     let matchData;
-
+    
     getCurrentMatchID().then((id) => {
         matchID = id;
         addMatchListener(matchID, (match) => {
@@ -30,8 +30,10 @@
     {/if}
 {/if}
 
+<Card />
 <style>
     main {
         background-color: var(--secondary-light);
     }
 </style>
+
