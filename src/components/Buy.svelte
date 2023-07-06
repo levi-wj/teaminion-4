@@ -1,6 +1,4 @@
 <script>
-// @ts-nocheck
-
     import { getQuantities, cardList } from "../js/cards";
     import Card from "./Card.svelte"
     
@@ -17,73 +15,24 @@
 <div class= "actionTop">
     <Card cardName="cellar" click={clickEve} />
     <Card cardName="merchant" click={clickEve} />
-    <Card cardName="cellar" click={clickEve} />
-
-        
-    <button class="Merchant" on:click={clickEve}>
-        <Card cardName= "merchant" />
-    </button>
-    <button class="Militia" on:click={clickEve}>
-        <Card cardName= "militia" />
-    </button>
-    <button class="mine" on:click={clickEve}>
-        <Card cardName= "mine" />
-    </button>
-    <button class="workshop" on:click={clickEve}>
-        <Card cardName= "workshop" />
-    </button>
+    <Card cardName="militia" click={clickEve} />
+    <Card cardName="mine" click={clickEve} />
+    <Card cardName="workshop" click={clickEve} />    
 </div>
 <div class= "actionBottom">
-    <button class="market" on:click={clickEve}>
-        <Card cardName= "market" />
-    </button>
-    <button class="moat" on:click={clickEve}>
-        <Card cardName= "moat" />
-    </button>
-    <button class="remodel" on:click={clickEve}>
-        <Card cardName= "remodel" />
-    </button>
-    <button class="smithy" on:click={clickEve}>
-        <Card cardName= "smithy" />
-    </button>
-    <button class="village" on:click={clickEve}>
-        <Card cardName= "village" />
-    </button>
+    <Card cardName="market" click={clickEve} />
+    <Card cardName="moat" click={clickEve} />
+    <Card cardName="remodel" click={clickEve} />
+    <Card cardName="smithy" click={clickEve} />
+    <Card cardName="village" click={clickEve} />
 </div>
 <div class= "treasureAndVictory">
     <!-- treasure -->
-    <button class="copper" on:click={clickEve}>
-        <Card cardName= "copper" />
-    </button>
-    <button class="silver" on:click={clickEve}>
-        <Card cardName= "silver" />
-    </button>
-    <button class="gold" on:click={clickEve}>
-        <Card cardName= "gold" />
-    </button>
+    <Card cardName="copper" click={clickEve} />
+    <Card cardName="silver" click={clickEve} />
+    <Card cardName="gold" click={clickEve} />
     <!-- victory -->
-    <button class="estate" on:click={clickEve}>
-        <Card cardName= "estate" />
-    </button>
-    <button class="duchy" on:click={clickEve}>
-        <Card cardName= "duchy" />
-    </button>
-    <button class="province" on:click={clickEve}>
-        <Card cardName= "province" />
-    </button>
+    <Card cardName="estate" click={clickEve} />
+    <Card cardName="duchy" click={clickEve} />
+    <Card cardName="province" click={clickEve} />
 </div>
-<!-- <Card cardName= cards.cellar.image /> -->
-<!-- {#each cards as card}
-    <button>
-        {card}.image
-    </button>
-{/each}     -->
-<!-- <script>
-    let items = ['Apple', 'Banana', 'Orange'];
-  </script>
-  
-  <ul>
-    {#each items as item}
-      <li>{item}</li>
-    {/each}
-  </ul> -->
