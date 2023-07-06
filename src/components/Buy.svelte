@@ -11,24 +11,16 @@
         const btnName = event.target.classList.value;
         console.log("the button is ", btnName);
     }
-    // loop
-//     let items = [
-//     { id: 1, name: 'Apple', colors: ['Red', 'Green', 'Yellow'] },
-//     { id: 2, name: 'Banana', colors: ['Yellow'] },
-//     { id: 3, name: 'Orange', colors: ['Orange', 'Yellow'] }
-//   ];
+
 </script>
-<!-- <div>
-    {#each items as item}
-        {item}
-    {/each}
-</div> -->
+
 
 <div class= "actionTop">
-    Action
-    <button class="Cellar" on:click={clickEve}>
-        <Card cardName= "cellar" />
-    </button>
+    <Card cardName="cellar" click={clickEve} />
+    <Card cardName="merchant" click={clickEve} />
+    <Card cardName="cellar" click={clickEve} />
+
+        
     <button class="Merchant" on:click={clickEve}>
         <Card cardName= "merchant" />
     </button>
