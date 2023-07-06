@@ -131,3 +131,7 @@ export const getQuantities = () => {
     });
     return quantities;
 }
+
+
+// 작성해봦
+// export스벨트(cardName)에 보내 -> 그럼 그게 크기 조정 및 변화를 줘서 ui로 보내줘

@@ -20,6 +20,9 @@
         <button on:click={e => startGame(matchID)}>Start Game</button>
     {:else}
         <p>You need at least 2 players to start the game</p>
+        <button on:click={e => startGame(matchID)}>
+            hi
+        </button>
     {/if}
 {:else}
     <h3>Waiting for the match leader to start the game...</h3>

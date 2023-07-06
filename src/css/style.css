@@ -63,15 +63,27 @@ body, p, button, input {
 
 button {
     background-color: var(--secondary);
-    border-radius: .6em;
+    border-radius: .3em;
     border: none;
     min-height: 45px;
-    min-width: 6.5em;
-    padding: .4em;
+    min-width: 5.5em;
+    padding: .2em;
 }
 
-/* base card style! */
-/* .card {
-    border-radius: .4em;
-    border: 10px solid black;
-} */
+.actionTop {
+    display:flex;
+    padding: 10px;
+    justify-content: center;
+}
+.actionBottom{
+    display:flex;
+    margin: 10px;
+    /* 위아래 */
+    align-items: center;
+    /* 왼쪽 오른쪽 */
+    justify-content: center;
+}
+.treasureAndVictory{
+    display:flex;
+    justify-content: center;
+}
