@@ -11,7 +11,6 @@
         const btnName = event.target.classList.value;
         console.log("the button is ", btnName);
     }
-
 </script>
 
 

@@ -2,12 +2,13 @@
     import { cardList} from "../js/cards";
     export let click;
     export let cardName;
-    let theCard = "/src/images/"+cardName+".jpg";
+    // let theCard = "/src/images/"+cardName+".jpg";
     // let cardName = cardList.cellar.image;
+    let card = cardList[cardName];
     
 </script>
 
-<img src={theCard} alt="card" on:click={click}>
+<img src={card.image} alt="card" on:click={click}>
 
 
 <style>
