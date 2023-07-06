@@ -28,13 +28,14 @@
 {#if matchData}
     {#if matchData.started}
         <PlayersHeader players={matchData.players} playerTurn={matchData.playerTurn} />
+        <Buy />
     {:else}
         <!-- Handle if the game hasn't started yet -->
         <GameLobby {matchID} {matchData} />
     {/if}
 {/if}
 
-<Buy />
+
 
 <style>
     main {
