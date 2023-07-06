@@ -23,12 +23,6 @@
             }
         });
     });
-
-    let showSlide = false;
-  
-    function toggleSlide() {
-      showSlide = !showSlide;
-    }
 </script>
 
 {#if matchData}
@@ -48,4 +42,3 @@
     }
 </style>
 
-  
