@@ -1,9 +1,13 @@
 <script>
     import PlayersHeader from "./PlayersHeader.svelte";
     import GameLobby from "./GameLobby.svelte";
-    import Card from "./Card.svelte";
+
     import { addMatchListener, isGameStartable, startGame } from '../js/model/game.js';
     import { getCurrentMatchID, isPlayerLeader } from '../js/model/matches'
+
+    import Buy from "./Buy.svelte";
+
+
 
     let matchID = '';
     let matchData;
@@ -19,6 +23,12 @@
             }
         });
     });
+
+    let showSlide = false;
+  
+    function toggleSlide() {
+      showSlide = !showSlide;
+    }
 </script>
 
 {#if matchData}
@@ -30,10 +40,12 @@
     {/if}
 {/if}
 
-<Card />
+<Buy />
+
 <style>
     main {
         background-color: var(--secondary-light);
     }
 </style>
 
+  
