@@ -109,9 +109,9 @@ export const cardList = [
         type: "action",
         quantity: 10,
         image: "/src/images/smithy.jpg",
-        action: (matchID, matchData, player) => {
+        action: () => {
             for (let i = 0; i < 3; i++) {
-                drawCard(player);
+                drawCard();
             }
         },
     },
@@ -137,11 +137,19 @@ const getCardID = (cardName) => {
 
 const copperID = getCardID('Copper');
 const estateID = getCardID('Estate');
+const smithyID = getCardID('Smithy')
+// export const startingDeck = [
+//      // Seven Coppers
+//     copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+//     // Three Estates
+//     estateID, estateID, estateID,
+// ];
+
 export const startingDeck = [
-     // Seven Coppers
-    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-    // Three Estates
-    estateID, estateID, estateID,
+    // Seven Coppers
+   smithyID, smithyID, smithyID, smithyID, smithyID, smithyID, smithyID,
+   // Three Estates
+   estateID, estateID, estateID,
 ];
 
 export const getQuantities = () => {
