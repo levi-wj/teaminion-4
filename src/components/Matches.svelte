@@ -27,10 +27,12 @@
     // open and close view cards dialog
     function showCards() {
         let cardSet = document.getElementById("cardSet");
+        // @ts-ignore
         cardSet.showModal();
     }
     function hideCards() {
         let cardSet = document.getElementById("cardSet");
+        // @ts-ignore
         cardSet.close();
     }
 </script>

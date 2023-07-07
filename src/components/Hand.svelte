@@ -3,14 +3,14 @@
     import Card from "./Card.svelte";
     import { playCard } from "../js/model/game";
 
-    export let matchID;
-    export let matchData;
+    
+    
     export let hand;
     export let canPlayCards = false;
 
     function clickCard (card) {
         if (canPlayCards) {
-            playCard(matchID, matchData, cardList[card]);
+            playCard(cardList[card]);
         }
     }
 </script>
@@ -18,29 +18,12 @@
 {#if hand}
     <div class="hand">
         {#each hand as cardIndex}
-            <Card {cardIndex} />
+            <Card {cardIndex} click={() => clickCard(cardIndex)} />
         {/each}
     </div>
 {/if}
 
 <style>
-    img {
-        width: 100%;
-        min-width: 100px;
-        height: 100%;
-        cursor: pointer;
-        transition: transform .2s ease-in-out;
-    }
-
-    img:hover:not(.disabled) {
-        transform: scale(1.15);
-    }
-
-    img.disabled {
-        filter: saturate(40%) brightness(70%);
-        cursor: not-allowed;
-    }
-
     .hand {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));

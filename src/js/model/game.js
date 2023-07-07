@@ -3,54 +3,65 @@ import { ref, get, child, onValue, update } from "firebase/database";
 import { getPlayerCount } from "./matches";
 import { startingDeck } from "../cards";
 import { shuffleArray } from "../utils";
+import { matchData } from "../stores";
 
+
+let matchID;
+
+let gameData;
+matchData.subscribe((value) => {
+    gameData = value;
+})
 // Takes in the ID of the match you want to listen to and a callback function
 // Calls the callback every time the data in the match changes
-export const addMatchListener = (id, cb) => {
+export const startMatchListener = (id) => {
+    matchID = id
     const matchesRef = ref(db, `matches/${id}`);
     onValue(matchesRef, (res) => {
         const data = res.val();
-        cb(data);
+        matchData.set(data);
     });
 } 
 
-export const startGame = async (matchID, matchData) => {
+export const startGame = async () => {
     const matchesRef = ref(db, `matches/${matchID}`);
 
-    for (const playerID in matchData.players) {
-        let player = matchData.players[playerID];
+    for (const playerID in gameData.players) {
+        let player = gameData.players[playerID];
         player.deck = shuffleArray(startingDeck);
         player.hand = [];
         // Build the player's hand
         for (let i = 0; i < 5; i++) {
-            drawCard(player);
+            drawCard();
         }
     }
-    matchData.started = true;
-    matchData.playerTurn = playerID;
+    gameData.started = true;
+    gameData.playerTurn = playerID;
 
-    await update(matchesRef, matchData);
-    startTurn(matchID, matchData);
+    await update(matchesRef, gameData);
+    startTurn();
 }
 
-export const startTurn = async (matchID, matchData) => {
+export const startTurn = async () => {
     const matchRef = ref(db, `matches/${matchID}`);
-    const playerRef = child(matchRef, `players/${matchData.playerTurn}`);
-    let playerData = (await get(playerRef)).val();
+    const playerRef = child(matchRef, `players/${gameData.playerTurn}`);
 
-    playerData.actions = 1;
-    playerData.buys = 1;
-    playerData.money = 0;
+    let playerData = {
+        actions: 1,
+        buys: 1,
+        money: 0} 
 
     update(playerRef, playerData);
 }
 
-export const isGameStartable = (matchData) => {
-    const playerCount = getPlayerCount(matchData);
-    return playerCount >= 2 && !matchData.started;
+export const isGameStartable = () => {
+    const playerCount = getPlayerCount(gameData);
+    return playerCount >= 2 && !gameData.started;
 }
 
-export const drawCard = async (player) => {
+export const drawCard = async () => {
+    let player = getWhichTurn();
+    const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
     if (player.deck.length === 0) {
         // Reshuffle discard pile into deck
         player.deck = shuffleArray(player.discard);
@@ -58,11 +69,16 @@ export const drawCard = async (player) => {
     }
 
     player.hand.push(player.deck.pop());
+    update(playerRef, player);
 }
 
-export const playCard = async (matchID, matchData, cardData) => {
+export const playCard = async (cardData) => {
     if (cardData.type === 'action') {
         cardData.action();
     }
     // dispatch('playCard', card)
+}
+
+const getWhichTurn = () => {
+    return gameData.players[gameData.playerTurn];
 }
