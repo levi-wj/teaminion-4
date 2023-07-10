@@ -11,6 +11,7 @@
     import CardsInPlay from "./CardsInPlay.svelte";
     import NextPhaseButton from "./NextPhaseButton.svelte";
 
+    let buyWindow;
     let gameData;
     // Playerdata is a reactive variable that gets the client's player data from the gameData
     $: playerData = gameData ? gameData.players[playerID] : {};
@@ -41,26 +42,50 @@
 
             {#if gameData.phase === 'action'}
                 <CardsInPlay cards={gameData.cardsInPlay} />
-            {:else if gameData.phase === 'buy'}
-                <Buy cards={gameData.cardsInPlay} playerData={playerData} />
             {/if}
 
             {#if isMyTurn}
                 <NextPhaseButton currentPhase={gameData.phase} />
             {/if}
 
-            <Hand hand={playerData.hand} canPlayCards={gameData.playerTurn === playerID && playerData.actions > 0}/>
+            <Hand hand={playerData.hand} canPlayCards={isMyTurn && playerData.actions > 0}/>
         </div>
     {:else}
         <!-- Handle if the game hasn't started yet -->
         <GameLobby {gameData} />
     {/if}
+
+    {#if isMyTurn && gameData.phase === 'buy'}
+        <dialog id="buyWindow" bind:this={buyWindow} open>
+            <div>
+                <Buy cards={gameData.cardsLeft} playerData={playerData} />
+            </div>
+        </dialog>
+    {/if}
 {/if}
+
 
 <style>
     .game {
         position: relative;
         width: 100vw;
         height: 100vh;
+    }
+
+    dialog {
+        position: absolute;
+        top: 0;
+        background-color: var(--primary-light);
+        border-radius: .6em;
+        border: none;
+        /* border: 5px solid var(--primary); */
+        color: var(--primary);
+    }
+
+    dialog div {
+        background-color: var(--primary);
+        border-radius: .6em;
+        border: none;
+        padding: 1em;
     }
 </style>

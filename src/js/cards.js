@@ -151,10 +151,12 @@ export const startingDeck = [
 ];
 
 export const getQuantities = () => {
-    const quantities = {};
-    Object.keys(cardList).forEach(card => {
-        quantities[card] = cardList[card].quantity;
+    const quantities = [];
+
+    cardList.forEach(card => {
+        quantities.push(card.quantity);
     });
+
     return quantities;
 }
 
