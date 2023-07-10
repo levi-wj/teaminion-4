@@ -1,18 +1,23 @@
 <script>
-    import { getQuantities, cardList } from "../js/cards";
+    import { cardList } from "../js/cards";
     import Card from "./Card.svelte"
+
+    export let cards;
+    export let playerData;
     
-    let cards = [];
-    cards = cardList;
-    function clickEve(event) {
-        // let btnName = event.target.class;
-        const btnName = event.target.classList.value;
-        console.log("the button is ", btnName);
+    function clickEve(e) {
+        console.log('card bought');
     }
 </script>
 
 
-<div class= "actionTop">
+{#if cards}
+    {#each cards as card}
+        <Card cardID={card} click={clickEve} />
+    {/each}
+{/if}
+
+<!-- <div class= "actionTop">
     <Card cardName="cellar" click={clickEve} />
     <Card cardName="merchant" click={clickEve} />
     <Card cardName="militia" click={clickEve} />
@@ -27,12 +32,12 @@
     <Card cardName="village" click={clickEve} />
 </div>
 <div class= "treasureAndVictory">
-    <!-- treasure -->
+    treasure
     <Card cardName="copper" click={clickEve} />
     <Card cardName="silver" click={clickEve} />
     <Card cardName="gold" click={clickEve} />
-    <!-- victory -->
+    victory
     <Card cardName="estate" click={clickEve} />
     <Card cardName="duchy" click={clickEve} />
     <Card cardName="province" click={clickEve} />
-</div>
+</div> -->
