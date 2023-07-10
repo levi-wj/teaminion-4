@@ -12,9 +12,15 @@
 
 
 {#if cards}
-    {#each cards as card}
-        <Card cardID={card} click={clickEve} />
-    {/each}
+    <div class="buyGrid">
+        {#each cards as cardCount, cardIndex}
+            <div>
+                {#if cardCount > 0}
+                    <Card cardID={cardIndex} click={clickEve} />
+                {/if}
+            </div>
+        {/each}
+    </div>
 {/if}
 
 <!-- <div class= "actionTop">
@@ -31,7 +37,6 @@
     <Card cardName="smithy" click={clickEve} />
     <Card cardName="village" click={clickEve} />
 </div>
-<div class= "treasureAndVictory">
     treasure
     <Card cardName="copper" click={clickEve} />
     <Card cardName="silver" click={clickEve} />
@@ -41,3 +46,12 @@
     <Card cardName="duchy" click={clickEve} />
     <Card cardName="province" click={clickEve} />
 </div> -->
+
+<style>
+    .buyGrid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-gap: 10px;
+    }
+</style>

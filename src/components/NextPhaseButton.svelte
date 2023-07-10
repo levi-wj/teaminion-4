@@ -12,6 +12,7 @@
 
 <style>
     button {
+        z-index: 10;
         position: absolute;
         right: 1em;
         bottom: 15em;
