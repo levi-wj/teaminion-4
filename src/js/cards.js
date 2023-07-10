@@ -1,4 +1,4 @@
-import { drawCard } from "./model/game";
+import { drawCardsForCurrentPlayer } from "./model/game";
 
 export const cardList = [
     // Treasure cards
@@ -110,9 +110,7 @@ export const cardList = [
         quantity: 10,
         image: "/src/images/smithy.jpg",
         action: () => {
-            for (let i = 0; i < 3; i++) {
-                drawCard();
-            }
+            drawCardsForCurrentPlayer(3)
         },
     },
     { // 14

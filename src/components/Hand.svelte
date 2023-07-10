@@ -3,22 +3,21 @@
     import Card from "./Card.svelte";
     import { playCard } from "../js/model/game";
 
-    
-    
     export let hand;
     export let canPlayCards = false;
 
-    function clickCard (card) {
-        if (canPlayCards) {
-            playCard(cardList[card]);
+    function clickCard (cardID, handIndex) {
+        const cardData = cardList[cardID];
+        if (canPlayCards && cardData.type === 'action') {
+            playCard(cardID, handIndex, cardData);
         }
     }
 </script>
 
 {#if hand}
     <div class="hand">
-        {#each hand as cardIndex}
-            <Card {cardIndex} click={() => clickCard(cardIndex)} />
+        {#each hand as cardID, handIndex}
+            <Card {cardID} disabled={canPlayCards === false} click={() => clickCard(cardID, handIndex)} />
         {/each}
     </div>
 {/if}

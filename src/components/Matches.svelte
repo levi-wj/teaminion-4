@@ -71,7 +71,7 @@
                             <div>
                                 {#each match.cardsLeft as card, id}
                                     {#if cardList[id].type === 'action'}
-                                        <img src={`/src/images/${cardList[id].image}`} alt="{card}">
+                                        <img src={cardList[id].image} alt="{card}">
                                     {/if}
                                 {/each}
                             </div>
