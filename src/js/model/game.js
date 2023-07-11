@@ -119,21 +119,22 @@ export const drawCards = (player, count) => {
     if (!player.hand) {
         player.hand = [];
     }
-
+    console.log(player.deck);
     for (let i = 0; i < count; i++) {
         // If there are no cards to draw, reshuffle discard pile into deck
-        if (player.deck && player.deck.length === 0) {
-            if (player.discard && player.discard.length > 0) {
-                // Reshuffle
-                player.deck = shuffleArray(player.discard);
-                player.discard = [];
-            } else {
-                // No cards to reshuffle, stop trying to draw cards
-                break;
+        if (player.deck) {
+            if (player.deck.length === 0) {
+                if (player.discard && player.discard.length > 0) {
+                    // Reshuffle
+                    player.deck = shuffleArray(player.discard);
+                    player.discard = [];
+                } else {
+                    // No cards to reshuffle, stop trying to draw cards
+                    break;
+                }
             }
+            player.hand.push(player.deck.pop());
         }
-
-        player.hand.push(player.deck.pop());
     }
 }
 
