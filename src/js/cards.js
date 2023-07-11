@@ -1,4 +1,5 @@
-import { drawCardsForCurrentPlayer } from "./model/game";
+import { get } from "firebase/database";
+import { drawCardsForCurrentPlayer, actionCard, buyCard, moneyCard, merchantSkill } from "./model/game";
 
 export const cardList = [
     // Treasure cards
@@ -59,28 +60,62 @@ export const cardList = [
         cost: 2,
         type: "action",
         quantity: 10,
-        image: "/src/images/cellar.jpg"
+        image: "/src/images/cellar.jpg",
+        action: () => {
+            //action +1
+            actionCard();
+            //discard card(s)
+            //draw card(s)(dicard cards == draw cards)
+            // let num;
+            // drawCardsForCurrentPlayer(num)
+        },
     },
     { // 7
         name: "Market",
         cost: 5,
         type: "action",
         quantity: 10,
-        image: "/src/images/market.jpg"
+        image: "/src/images/market.jpg",
+        action: (matchID, matchData, player, cardData) => {
+            //card +1
+            drawCardsForCurrentPlayer(1);
+            //action +1
+            actionCard();
+            // buy+1
+            buyCard();
+            // money+1
+            moneyCard();
+        },
     },
     { // 8
         name: "Merchant",
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "/src/images/merchant.jpg"
+        image: "/src/images/merchant.jpg",
+        action: () => {
+            // card +1
+            drawCardsForCurrentPlayer(1)
+            // action +1 
+            actionCard();
+            // option: the first time you play a silver this turn money+=1
+            merchantSkill();
+        }
     },
     { // 9
         name: "Militia",
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "/src/images/militia.jpg"
+        image: "/src/images/militia.jpg",
+        action: () => {
+            // money +2
+            for(let i = 0; i < 2; i++){
+                moneyCard();
+            }
+            
+            // other players' cards discards down to 3 cards in hand
+        }
     },
     { // 10
         name: "Mine",
@@ -88,20 +123,34 @@ export const cardList = [
         type: "action",
         quantity: 10,
         image: "/src/images/mine.jpg",
+        action: () => {
+            // trash a treasure card
+            // copper -> silver
+            // silver -> gold
+        }
     },
     { // 11
         name: "Moat",
         cost: 2,
         type: "action",
         quantity: 10,
-        image: "/src/images/moat.jpg"
+        image: "/src/images/moat.jpg",
+        action: () => {
+            // card +2
+            drawCardsForCurrentPlayer(2)
+            // shield from other players' attack
+        }
     },
     { // 12
         name: "Remodel",
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "/src/images/remodel.jpg"
+        image: "/src/images/remodel.jpg",
+        action: () => {
+            //trash 'A' card
+            // gain a card(up to 'A'cost +2)
+        }
     },
     { // 13
         name: "Smithy",
@@ -118,14 +167,25 @@ export const cardList = [
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "/src/images/village.jpg"
+        image: "/src/images/village.jpg",
+        action: () => {
+            // card + 1
+            drawCardsForCurrentPlayer(1)
+            // action + 2
+            for (let i = 0; i< 2; i++){
+                actionCard();
+            }
+        }
     },
     { // 15
         name: "Workshop",
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "/src/images/workshop.jpg"
+        image: "/src/images/workshop.jpg",
+        action: () => {
+            //get card up to 4costs (x buy)
+        }
     },
 ];
 
@@ -135,17 +195,21 @@ const getCardID = (cardName) => {
 
 const copperID = getCardID('Copper');
 const estateID = getCardID('Estate');
-const smithyID = getCardID('Smithy')
+const smithyID = getCardID('Smithy');
+const marketID = getCardID('Market');
+const silverID = getCardID('Silver');
+const merchantID = getCardID('Merchant');
 // export const startingDeck = [
 //      // Seven Coppers
 //     copperID, copperID, copperID, copperID, copperID, copperID, copperID,
 //     // Three Estates
 //     estateID, estateID, estateID,
 // ];
+const cellarID = getCardID('Cellar');
 
 export const startingDeck = [
     // Seven Coppers
-   smithyID, smithyID, smithyID, smithyID, smithyID, smithyID, smithyID,
+   cellarID, marketID, smithyID, merchantID, silverID, copperID, copperID,
    // Three Estates
    estateID, estateID, estateID,
 ];
@@ -159,7 +223,3 @@ export const getQuantities = () => {
 
     return quantities;
 }
-
-
-// 작성해봦
-// export스벨트(cardName)에 보내 -> 그럼 그게 크기 조정 및 변화를 줘서 ui로 보내줘

@@ -165,5 +165,36 @@ export const playCard = async (cardID, posInHand, cardData) => {
 }
 
 const getWhichTurnPlayer = () => {
+    console.log(gameData.players[gameData.playerTurn])
     return gameData.players[gameData.playerTurn];
+}
+
+// get one more action
+export const actionCard = () => {
+    let action =gameData.players[gameData.playerTurn].actions++;
+    console.log(gameData.players[gameData.playerTurn]);
+    return action;
+}
+
+export const buyCard = () => {
+    let buy =gameData.players[gameData.playerTurn].buys++;
+    console.log(gameData.players[gameData.playerTurn]);
+    return buy;
+}
+
+export const moneyCard = () => {
+    let money = gameData.players[gameData.playerTurn].money++;
+    return money;
+}
+
+export const merchantSkill = () => {
+    let player = getWhichTurnPlayer();
+    player.hand.forEach(element => {
+        // silver
+        if(element == 1){
+            return gameData.players[gameData.playerTurn].money++;
+        }else{
+            return;
+        }
+    });
 }
