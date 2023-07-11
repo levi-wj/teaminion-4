@@ -1,13 +1,10 @@
 <script>
     import { cardList } from "../js/cards";
     import Card from "./Card.svelte"
+    import { buyCard } from "../js/model/game.js";
 
     export let cards;
     export let playerData;
-    
-    function clickEve(e) {
-        console.log('card bought');
-    }
 </script>
 
 
@@ -16,7 +13,7 @@
         {#each cards as cardCount, cardIndex}
             <div>
                 {#if cardCount > 0}
-                    <Card cardID={cardIndex} click={clickEve} />
+                    <Card cardID={cardIndex} click={() => buyCard(cardIndex)} />
                 {/if}
             </div>
         {/each}

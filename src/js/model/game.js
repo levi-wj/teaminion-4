@@ -1,7 +1,7 @@
 import { db, playerID } from "../firebase";
 import { ref, get, child, onValue, update } from "firebase/database";
 import { getPlayerCount } from "./matches";
-import { startingDeck } from "../cards";
+import { cardList, startingDeck } from "../cards";
 import { shuffleArray } from "../utils";
 import { matchData } from "../stores";
 import { draw } from "svelte/transition";
@@ -71,7 +71,16 @@ export const startTurn = () => {
 
 export const startBuyPhase = () => {
     const matchRef = ref(db, `matches/${matchID}`);
+    const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
+    let player = getWhichTurnPlayer();
+    player.hand.forEach(cardID => {
+        const card = cardList[cardID];
+        if (card.type === 'treasure') {
+            player.money += card.value;
+        }
+    });
     update(matchRef, { phase: 'buy'});
+    update(playerRef, { money: player.money });
 }
 
 export const endTurn = () => {
@@ -119,7 +128,9 @@ export const drawCards = (player, count) => {
     if (!player.hand) {
         player.hand = [];
     }
-    console.log(player.deck);
+    if (!player.deck) {
+        player.deck = [];
+    }
     for (let i = 0; i < count; i++) {
         // If there are no cards to draw, reshuffle discard pile into deck
         if (player.deck) {
@@ -171,21 +182,40 @@ const getWhichTurnPlayer = () => {
 }
 
 // get one more action
-export const actionCard = () => {
+export const addAction = () => {
     let action =gameData.players[gameData.playerTurn].actions++;
     console.log(gameData.players[gameData.playerTurn]);
     return action;
 }
 
-export const buyCard = () => {
-    let buy =gameData.players[gameData.playerTurn].buys++;
+// get one more buy
+export const addBuy = () => {
+    let buy = gameData.players[gameData.playerTurn].buys++;
     console.log(gameData.players[gameData.playerTurn]);
     return buy;
 }
 
-export const moneyCard = () => {
+// get one more money
+export const addMoney = () => {
     let money = gameData.players[gameData.playerTurn].money++;
     return money;
+}
+
+// buy a card
+export const buyCard = (cardID) => {
+    let player = getWhichTurnPlayer();
+    let card = cardList[cardID];
+    if (!player.discard) {
+        player.discard = [];
+    }
+    if (player.buys > 0) {
+        if (player.money >= card.cost) {
+            player.money -= card.cost;
+            player.buys--;
+            player.discard.push(cardID);
+            gameData.cardsLeft[cardID]--;
+        }
+    }
 }
 
 export const merchantSkill = () => {
