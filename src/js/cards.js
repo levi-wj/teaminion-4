@@ -1,5 +1,5 @@
 import { get } from "firebase/database";
-import { drawCardsForCurrentPlayer, actionCard, buyCard, moneyCard, merchantSkill } from "./model/game";
+import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, merchantSkill } from "./model/game";
 
 export const cardList = [
     // Treasure cards
@@ -63,7 +63,7 @@ export const cardList = [
         image: "/src/images/cellar.jpg",
         action: () => {
             //action +1
-            actionCard();
+            addAction();
             //discard card(s)
             //draw card(s)(dicard cards == draw cards)
             // let num;
@@ -80,11 +80,11 @@ export const cardList = [
             //card +1
             drawCardsForCurrentPlayer(1);
             //action +1
-            actionCard();
+            addAction();
             // buy+1
-            buyCard();
+            addBuy();
             // money+1
-            moneyCard();
+            addMoney();
         },
     },
     { // 8
@@ -97,7 +97,7 @@ export const cardList = [
             // card +1
             drawCardsForCurrentPlayer(1)
             // action +1 
-            actionCard();
+            addAction();
             // option: the first time you play a silver this turn money+=1
             merchantSkill();
         }
@@ -111,7 +111,7 @@ export const cardList = [
         action: () => {
             // money +2
             for(let i = 0; i < 2; i++){
-                moneyCard();
+                addMoney();
             }
             
             // other players' cards discards down to 3 cards in hand
@@ -173,7 +173,7 @@ export const cardList = [
             drawCardsForCurrentPlayer(1)
             // action + 2
             for (let i = 0; i< 2; i++){
-                actionCard();
+                addAction();
             }
         }
     },
@@ -199,20 +199,20 @@ const smithyID = getCardID('Smithy');
 const marketID = getCardID('Market');
 const silverID = getCardID('Silver');
 const merchantID = getCardID('Merchant');
-// export const startingDeck = [
-//      // Seven Coppers
-//     copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-//     // Three Estates
-//     estateID, estateID, estateID,
-// ];
+export const startingDeck = [
+     // Seven Coppers
+    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+    // Three Estates
+    estateID, estateID, estateID,
+];
 const cellarID = getCardID('Cellar');
 
-export const startingDeck = [
-    // Seven Coppers
-   cellarID, marketID, smithyID, merchantID, silverID, copperID, copperID,
-   // Three Estates
-   estateID, estateID, estateID,
-];
+// export const startingDeck = [
+//     // Seven Coppers
+//    cellarID, marketID, smithyID, merchantID, silverID, copperID, copperID,
+//    // Three Estates
+//    estateID, estateID, estateID,
+// ];
 
 export const getQuantities = () => {
     const quantities = [];

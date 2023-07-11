@@ -10,7 +10,7 @@
             <div class="player player--current">
                 <div class="player__items">
                     <div><i class="fa fa-bolt"></i> - {player.actions ?? 0}</div>
-                    <div><i class="fa fa-sack-dollar"></i> - {player.gold ?? 0}</div>
+                    <!-- <div><i class="fa fa-sack-dollar"></i> - {player.gold ?? 0}</div> -->
                 </div>
                 <div class="player__name">{player.nickname}</div>
             </div>
