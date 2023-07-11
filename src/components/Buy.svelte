@@ -31,11 +31,11 @@
     <Card cardName="workshop" click={clickEve} />    
 </div>
 <div class= "actionBottom">
-    <Card cardName="market" click={clickEve} />
-    <Card cardName="moat" click={clickEve} />
-    <Card cardName="remodel" click={clickEve} />
-    <Card cardName="smithy" click={clickEve} />
-    <Card cardName="village" click={clickEve} />
+    <Card cardIndex="market" click={clickEve} />
+    <Card cardIndex="moat" click={clickEve} />
+    <Card cardIndex="remodel" click={clickEve} />
+    <Card cardIndex="smithy" click={clickEve} />
+    <Card cardIndex="village" click={clickEve} />
 </div>
     treasure
     <Card cardName="copper" click={clickEve} />
