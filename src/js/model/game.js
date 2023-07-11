@@ -198,3 +198,17 @@ export const merchantSkill = () => {
         }
     });
 }
+
+export const mineSkill = () => {
+    let player = getWhichTurnPlayer();
+    //copper -> silver
+    let selectedCard;
+    if(selectedCard == 0){
+        return selectedCard = 1;
+    }
+    else if(selectedCard ==1){
+        return selectedCard = 2;
+    }else{
+        return;
+    }
+}
