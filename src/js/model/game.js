@@ -1,11 +1,10 @@
 import { db, playerID } from "../firebase";
 import { ref, get, child, onValue, update, remove } from "firebase/database";
 import { getPlayerCount } from "./matches";
-import { cardList, startingDeck } from "../cards";
+import { cardList, startingDeck, getCardID } from "../cards";
 import { shuffleArray } from "../utils";
 import { matchData } from "../stores";
 import { draw } from "svelte/transition";
-
 
 
 let matchID;
@@ -26,10 +25,23 @@ export const startGameListeners = (id) => {
         const data = res.val();
         matchData.set(data);
     });
-} 
+}
+
+export const pushPlayerDataToDB = (playerData) => {
+    const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
+    const updateData = playerData ?? getWhichTurnPlayer();
+
+    return update(playerRef, updateData);
+}
+
+export const pushGameDataToDB = (matchData) => {
+    const matchRef = ref(db, `matches/${matchID}`);
+    const updateData = matchData ?? gameData;
+
+    return update(matchRef, updateData);
+}
 
 export const startGame = async () => {
-    const matchesRef = ref(db, `matches/${matchID}`);
     let updatedMatch = {};
 
     updatedMatch.started = true;
@@ -47,14 +59,11 @@ export const startGame = async () => {
         updatedMatch.players[playerID] = updatedPlayer;
     }
 
-    await update(matchesRef, updatedMatch);
+    await pushGameDataToDB(updatedMatch);
     startTurn();
 }
 
 export const startTurn = () => {
-    const matchRef = ref(db, `matches/${matchID}`);
-    const playerRef = child(matchRef, `players/${gameData.playerTurn}`);
-
     const playerData = {
         actions: 1,
         buys: 1,
@@ -66,26 +75,26 @@ export const startTurn = () => {
         cardsInPlay: [],
     };
 
-    update(matchRef, matchData);
-    update(playerRef, playerData);
+    pushGameDataToDB(matchData);
+    pushPlayerDataToDB(playerData);
 }
 
 export const startBuyPhase = () => {
-    const matchRef = ref(db, `matches/${matchID}`);
-    const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
     let player = getWhichTurnPlayer();
+
+    // Add up the player's money!
     player.hand.forEach(cardID => {
         const card = cardList[cardID];
         if (card.type === 'treasure') {
             player.money += card.value;
         }
     });
-    update(matchRef, { phase: 'buy'});
-    update(playerRef, { money: player.money });
+
+    pushGameDataToDB({ phase: 'buy'});
+    pushPlayerDataToDB({ money: player.money });
 }
 
 export const endTurn = () => {
-    const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
     let player = getWhichTurnPlayer();
 
     if (!player.discard) {
@@ -104,7 +113,7 @@ export const endTurn = () => {
     player.hand = [];
     drawCards(player, 5);
 
-    update(playerRef, player);
+    pushPlayerDataToDB(player);
 
     // Start the turn for the next player
     gameData.playerTurn = getNextPlayerTurn();
@@ -126,12 +135,6 @@ export const isGameStartable = () => {
 }
 
 export const drawCards = (player, count) => {
-    if (!player.hand) {
-        player.hand = [];
-    }
-    if (!player.deck) {
-        player.deck = [];
-    }
     for (let i = 0; i < count; i++) {
         // If there are no cards to draw, reshuffle discard pile into deck
         if (player.deck) {
@@ -150,13 +153,22 @@ export const drawCards = (player, count) => {
     }
 }
 
+export const discardCards = (cards) => {
+    let player = getWhichTurnPlayer();
+
+    // Iterate through the cards to discard backwards so that the indexes don't change
+    for (let i = cards.length - 1; i >= 0; i--) {
+        player.hand.splice(cards[i].handIndex, 1);
+        player.discard.push(cards[i].cardID);
+    }
+}
+
 export const drawCardsForCurrentPlayer = (count) => {
     let player = getWhichTurnPlayer();
     drawCards(player, count);
 }
 
 export const playCard = async (cardID, posInHand, cardData) => {
-    const matchRef = ref(db, `matches/${matchID}`);
     let player = getWhichTurnPlayer();
 
     if (cardData.action !== undefined) {
@@ -174,31 +186,37 @@ export const playCard = async (cardID, posInHand, cardData) => {
         cardData.action();
     }
 
-    update(matchRef, gameData);
+    pushGameDataToDB();
 }
 
-const getWhichTurnPlayer = () => {
-    console.log(gameData.players[gameData.playerTurn])
-    return gameData.players[gameData.playerTurn];
+export const getWhichTurnPlayer = () => {
+    let player = gameData.players[gameData.playerTurn];
+
+    if (!player.hand) { player.hand = []; }
+    if (!player.deck) { player.deck = []; }
+    if (!player.discard) { player.discard = []; }
+
+    return player;
 }
 
 // get one more action
 export const addAction = () => {
-    let action =gameData.players[gameData.playerTurn].actions++;
-    console.log(gameData.players[gameData.playerTurn]);
+    let player = getWhichTurnPlayer();
+    let action = player.actions++;
     return action;
 }
 
 // get one more buy
 export const addBuy = () => {
-    let buy = gameData.players[gameData.playerTurn].buys++;
-    console.log(gameData.players[gameData.playerTurn]);
+    let player = getWhichTurnPlayer();
+    let buy = player.buys++;
     return buy;
 }
 
 // get one more money
 export const addMoney = () => {
-    let money = gameData.players[gameData.playerTurn].money++;
+    let player = getWhichTurnPlayer();
+    let money = player.money++;
     return money;
 }
 
@@ -225,7 +243,7 @@ export const merchantSkill = () => {
     player.hand.forEach(element => {
         // silver
         if(element == 1){
-            return gameData.players[gameData.playerTurn].money++;
+            return player.money++;
         }else{
             return;
         }
@@ -235,25 +253,28 @@ export const merchantSkill = () => {
 export const mineSkill = () => {
     let player = getWhichTurnPlayer();
     //copper -> silver
+    // not finished
     let selectedCard;
-    if(selectedCard == 0){
-        return selectedCard = 1;
-    }
-    else if(selectedCard ==1){
-        return selectedCard = 2;
-    }else{
+    if (selectedCard == getCardID('copper')) {
+        return selectedCard = getCardID('silver');
+    } else if(selectedCard == getCardID('silver')) {
+        return selectedCard = getCardID('gold');
+    } else {
         return;
     }
 }
 
 export function leaveGame() {
+    // If there is more than one player, remove the player from the match
     if (getPlayerCount(gameData) > 1) {
         const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
         remove(playerRef);
-        
     } else {
+        // Else, if you were the last player in the match, just delete the whole game
         const matchRef = ref(db, `matches/${matchID}`);
         remove(matchRef);
     }
+
+    // Send back the matches page
     window.location.href = "/";
 }
