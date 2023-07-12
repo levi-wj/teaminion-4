@@ -1,5 +1,5 @@
-import { get } from "firebase/database";
-import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, merchantSkill } from "./model/game";
+import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB } from "./model/game";
+import PickerWindow from '../components/PickerWindow.svelte';
 
 export const cardList = [
     // Treasure cards
@@ -62,12 +62,33 @@ export const cardList = [
         quantity: 10,
         image: "/src/images/cellar.jpg",
         action: () => {
+            const playerData = getWhichTurnPlayer();
+
             //action +1
             addAction();
-            //discard card(s)
-            //draw card(s)(dicard cards == draw cards)
-            // let num;
-            // drawCardsForCurrentPlayer(num)
+
+            function discardAndDraw(discardedCards) {
+                // Discard all selected cards
+                discardCards(discardedCards);
+
+                // Draw as many cards as we discarded
+                drawCardsForCurrentPlayer(discardedCards.length);
+
+                // Update DB with new player data
+                pushPlayerDataToDB();
+            }
+
+            // Create a window to pick cards to discard
+            new PickerWindow({
+                // Create the window as a child of the root <html> element
+                target: document.documentElement,
+                props: {
+                    windowTitle: 'Discard any number of cards',
+                    cardsToShow: playerData.hand,
+                    // This function will get called when all the cards have been picked
+                    finishPickingEvent: discardAndDraw,
+                }
+            });
         },
     },
     { // 7
@@ -76,7 +97,7 @@ export const cardList = [
         type: "action",
         quantity: 10,
         image: "/src/images/market.jpg",
-        action: (matchID, matchData, player, cardData) => {
+        action: () => {
             //card +1
             drawCardsForCurrentPlayer(1);
             //action +1
@@ -189,7 +210,7 @@ export const cardList = [
     },
 ];
 
-const getCardID = (cardName) => {
+export const getCardID = (cardName) => {
     return cardList.findIndex(card => card.name === cardName);
 }
 
@@ -199,17 +220,18 @@ const smithyID = getCardID('Smithy');
 const marketID = getCardID('Market');
 const silverID = getCardID('Silver');
 const merchantID = getCardID('Merchant');
+const cellarID = getCardID('Cellar');
+
 export const startingDeck = [
      // Seven Coppers
     copperID, copperID, copperID, copperID, copperID, copperID, copperID,
     // Three Estates
     estateID, estateID, estateID,
 ];
-const cellarID = getCardID('Cellar');
 
 // export const startingDeck = [
 //     // Seven Coppers
-//    cellarID, marketID, smithyID, merchantID, silverID, copperID, copperID,
+//    cellarID, cellarID, cellarID, cellarID, cellarID, cellarID, copperID,
 //    // Three Estates
 //    estateID, estateID, estateID,
 // ];
