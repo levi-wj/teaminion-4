@@ -1,6 +1,6 @@
 <script>
     import { playerID } from "../js/firebase";
-    import { startGameListeners } from '../js/model/game.js';
+    import { startGameListeners, leaveGame } from '../js/model/game.js';
     import { getCurrentMatchID } from '../js/model/matches'
     import { matchData } from "../js/stores";
 
@@ -10,6 +10,7 @@
     import Hand from "./Hand.svelte";
     import CardsInPlay from "./CardsInPlay.svelte";
     import NextPhaseButton from "./NextPhaseButton.svelte";
+
 
     let buyWindow;
     let gameData;
@@ -39,6 +40,7 @@
     {#if gameData.started}
         <div class="game">
             <PlayersHeader players={gameData.players} playerTurn={gameData.playerTurn} />
+            <button class="leave" on:click={leaveGame}><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
 
             {#if gameData.phase === 'action'}
                 <CardsInPlay cards={gameData.cardsInPlay} />
@@ -57,8 +59,9 @@
 
     {#if isMyTurn && gameData.phase === 'buy'}
         <dialog id="buyWindow" bind:this={buyWindow} open>
+            
             <div>
-                <Buy cards={gameData.cardsLeft} playerData={playerData} />
+                <Buy cards={gameData.cardsLeft} playerData={playerData} money={playerData.money ?? 0} />
             </div>
         </dialog>
     {/if}
@@ -88,4 +91,14 @@
         border: none;
         padding: 1em;
     }
+
+    .leave {
+        position: absolute;
+        top: 0.1em;
+        right: 0.2em;
+        min-width: 3em;
+        width: 3em;
+    }
+
+    
 </style>

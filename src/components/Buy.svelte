@@ -5,6 +5,7 @@
 
     export let cards;
     export let playerData;
+    
 </script>
 
 
@@ -17,32 +18,17 @@
                 {/if}
             </div>
         {/each}
+        <div class="shmunny centered">
+            <img src="/src/images/coin.png"> 
+            <span>{playerData.money ?? 0}</span>
+        </div> 
+        <div class="buys centered">
+            <span>{playerData.buys ?? "error"}</span>
+        </div>
     </div>
 {/if}
 
-<!-- <div class= "actionTop">
-    <Card cardName="cellar" click={clickEve} />
-    <Card cardName="merchant" click={clickEve} />
-    <Card cardName="militia" click={clickEve} />
-    <Card cardName="mine" click={clickEve} />
-    <Card cardName="workshop" click={clickEve} />    
-</div>
-<div class= "actionBottom">
-    <Card cardIndex="market" click={clickEve} />
-    <Card cardIndex="moat" click={clickEve} />
-    <Card cardIndex="remodel" click={clickEve} />
-    <Card cardIndex="smithy" click={clickEve} />
-    <Card cardIndex="village" click={clickEve} />
-</div>
-    treasure
-    <Card cardName="copper" click={clickEve} />
-    <Card cardName="silver" click={clickEve} />
-    <Card cardName="gold" click={clickEve} />
-    victory
-    <Card cardName="estate" click={clickEve} />
-    <Card cardName="duchy" click={clickEve} />
-    <Card cardName="province" click={clickEve} />
-</div> -->
+
 
 <style>
     .buyGrid {
@@ -50,5 +36,35 @@
         grid-template-columns: repeat(6, 1fr);
         grid-template-rows: repeat(3, 1fr);
         grid-gap: 10px;
+    }
+
+    .shmunny {
+        color: black;
+        
+        font-family: serif;
+        font-weight: bold;
+    }
+
+    .shmunny img{
+        width: 125px;
+    }
+
+    .shmunny span{
+        position: absolute;
+    }
+
+    .centered {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4em;
+    }
+
+    .buys span{
+        color: white;
+        border: 2px solid white;
+        padding: 10px calc(10px + .4em);
+        border-radius: 100%;
     }
 </style>

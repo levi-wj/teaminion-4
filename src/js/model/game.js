@@ -1,10 +1,11 @@
 import { db, playerID } from "../firebase";
-import { ref, get, child, onValue, update } from "firebase/database";
+import { ref, get, child, onValue, update, remove } from "firebase/database";
 import { getPlayerCount } from "./matches";
 import { cardList, startingDeck } from "../cards";
 import { shuffleArray } from "../utils";
 import { matchData } from "../stores";
 import { draw } from "svelte/transition";
+
 
 
 let matchID;
@@ -214,6 +215,7 @@ export const buyCard = (cardID) => {
             player.buys--;
             player.discard.push(cardID);
             gameData.cardsLeft[cardID]--;
+            matchData.set(gameData);
         }
     }
 }
@@ -242,4 +244,16 @@ export const mineSkill = () => {
     }else{
         return;
     }
+}
+
+export function leaveGame() {
+    if (getPlayerCount(gameData) > 1) {
+        const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
+        remove(playerRef);
+        
+    } else {
+        const matchRef = ref(db, `matches/${matchID}`);
+        remove(matchRef);
+    }
+    window.location.href = "/";
 }
