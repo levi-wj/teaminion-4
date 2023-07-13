@@ -222,19 +222,19 @@ const silverID = getCardID('Silver');
 const merchantID = getCardID('Merchant');
 const cellarID = getCardID('Cellar');
 
-export const startingDeck = [
-     // Seven Coppers
-    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-    // Three Estates
-    estateID, estateID, estateID,
-];
-
 // export const startingDeck = [
-//     // Seven Coppers
-//    cellarID, cellarID, cellarID, cellarID, cellarID, cellarID, copperID,
-//    // Three Estates
-//    estateID, estateID, estateID,
+//      // Seven Coppers
+//     copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+//     // Three Estates
+//     estateID, estateID, estateID,
 // ];
+
+export const startingDeck = [
+    // Seven Coppers
+   cellarID, cellarID, cellarID, cellarID, cellarID, cellarID, copperID,
+   // Three Estates
+   estateID, estateID, estateID,
+];
 
 export const getQuantities = () => {
     const quantities = [];

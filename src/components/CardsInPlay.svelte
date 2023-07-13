@@ -1,22 +1,28 @@
 <script>
     import Card from "./Card.svelte";
+    import { fade, fly } from 'svelte/transition';
 
     export let cards;
 </script>
 
 
 {#if cards}
-    <div class="hand">
+    <div class="cardsinplay" transition:fade>
         {#each cards as cardID}
-            <Card {cardID} />
+            <div transition:fade>
+                <Card {cardID} />
+            </div>
         {/each}
     </div>
 {/if}
 
 <style>
-    .hand {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    .cardsinplay {
+        display: flex;
+        flex-wrap: wrap;
         gap: .75em;
+        justify-content: center;
+        padding: 5em 1em;
     }
+
 </style>

@@ -4,13 +4,22 @@
     export let click = null;
     export let cardID;
     export let disabled = false;
+    export let clickTransition = '';
 
+    let img;
+
+    function clickWrapper() {
+        click();
+        if (clickTransition) {
+            img.classList.add();
+        }
+    }
     $: card = cardList[cardID];
 </script>
 
 <div>
     <!-- {cardID} -->
-    <img class:disabled class:clickable={click !== null} src={card.image} alt="card" on:click={click}>
+    <img bind:this={img} class:disabled class:clickable={click !== null} src={card.image} alt="card" on:click={clickWrapper}>
 </div>
 
 <style>
@@ -20,6 +29,7 @@
         border-radius: .4em;
         border: 5px solid black;
         transition: transform .15s;
+        transition: margin-bottom 1s, opacity 1s;
     }
 
     img.clickable {

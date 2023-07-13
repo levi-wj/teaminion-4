@@ -2,6 +2,7 @@
     import { cardList } from "../js/cards";
     import Card from "./Card.svelte";
     import { playCard } from "../js/model/game";
+    import { fade, fly } from 'svelte/transition';
 
     export let hand;
     export let canPlayCards = false;
@@ -17,23 +18,23 @@
 {#if hand}
     <div class="hand">
         {#each hand as cardID, handIndex}
-            <Card {cardID} disabled={canPlayCards === false} click={() => clickCard(cardID, handIndex)} />
+            <div transition:fade>
+                <Card {cardID} disabled={canPlayCards === false} click={() => clickCard(cardID, handIndex)} clickTransition='slideup' />
+            </div>
         {/each}
     </div>
 {/if}
 
 <style>
     .hand {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: .75em;
+        justify-content: center;
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        margin: auto;
         margin-bottom: 1em;
-        max-width: 600px;
-        min-width: 500px;
     }
 </style>

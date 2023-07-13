@@ -61,7 +61,8 @@
         <dialog id="buyWindow" bind:this={buyWindow} open>
             
             <div>
-                <Buy cards={gameData.cardsLeft} playerData={playerData} money={playerData.money ?? 0} />
+                <!-- money={playerData.money ?? 0}  -->
+                <Buy cards={gameData.cardsLeft} playerData={playerData}/>
             </div>
         </dialog>
     {/if}
