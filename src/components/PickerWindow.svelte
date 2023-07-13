@@ -56,9 +56,7 @@
         {/each}
     </div>
     <div class="btnRow">
-        {#if howManyCardsToPick === 0}
-            <button on:click={closeWindow}>Done</button>
-        {/if}
+        <button on:click={closeWindow}>Done</button>
     </div>
 </dialog>
 

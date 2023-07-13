@@ -1,4 +1,4 @@
-import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB } from "./model/game";
+import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB, trashCards, gainCard } from "./model/game";
 import PickerWindow from '../components/PickerWindow.svelte';
 
 export const cardList = [
@@ -148,6 +148,33 @@ export const cardList = [
             // trash a treasure card
             // copper -> silver
             // silver -> gold
+            const playerData = getWhichTurnPlayer();
+            function trashAndUpgrade(list) {
+                if (list.length > 0) {
+                    const trashCard = list[0].cardID;
+                    trashCards(list);
+                    if (trashCard === getCardID("Copper")) {
+                        gainCard(getCardID("Silver"));
+                    } else if (trashCard === getCardID("Silver")) {
+                        gainCard(getCardID("Gold"));
+                    }
+                    pushPlayerDataToDB();
+                }
+            }
+            new PickerWindow({
+                // Create the window as a child of the root <html> element
+                target: document.documentElement,
+                props: {
+                    windowTitle: 'Pick a treasure to upgrade I guess',
+                    cardsToShow: playerData.hand.filter(cardID => {
+                        const cardData = cardList[cardID];
+                        return (cardData.type == "treasure" && cardData.value !== 3)
+                    }),
+                    // This function will get called when all the cards have been picked
+                    finishPickingEvent: trashAndUpgrade,
+                    howManyCardsToPick: 1,
+                }
+            });
         }
     },
     { // 11
@@ -221,6 +248,8 @@ const marketID = getCardID('Market');
 const silverID = getCardID('Silver');
 const merchantID = getCardID('Merchant');
 const cellarID = getCardID('Cellar');
+const mineID = getCardID('Mine');
+
 
 // export const startingDeck = [
 //      // Seven Coppers
@@ -231,7 +260,7 @@ const cellarID = getCardID('Cellar');
 
 export const startingDeck = [
     // Seven Coppers
-   cellarID, cellarID, cellarID, cellarID, cellarID, cellarID, copperID,
+   copperID, copperID, copperID, copperID, copperID, copperID, copperID,
    // Three Estates
    estateID, estateID, estateID,
 ];
