@@ -29,7 +29,6 @@
 {/if}
 
 
-
 <style>
     .buyGrid {
         display: grid;
