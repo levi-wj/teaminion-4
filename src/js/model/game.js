@@ -167,6 +167,18 @@ export const discardCards = (cards) => {
     }
 }
 
+export const trashCards = (cards) => {
+    let player = getWhichTurnPlayer();
+    if (!gameData.trash) {
+        gameData.trash = [];
+    }
+    // Iterate through the cards to discard backwards so that the indexes don't change
+    for (let i = cards.length - 1; i >= 0; i--) {
+        player.hand.splice(cards[i].handIndex, 1);
+        gameData.trash.push(cards[i].cardID);
+    }
+}
+
 export const drawCardsForCurrentPlayer = (count) => {
     let player = getWhichTurnPlayer();
     drawCards(player, count);
@@ -240,6 +252,11 @@ export const buyCard = (cardID) => {
             matchData.set(gameData);
         }
     }
+}
+
+export const gainCard = (cardID) => {
+    let player = getWhichTurnPlayer();
+    player.discard.push(cardID);
 }
 
 export const merchantSkill = () => {
