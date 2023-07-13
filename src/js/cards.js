@@ -9,7 +9,7 @@ export const cardList = [
         type: "treasure",
         value: 1,
         quantity: 60,
-        image: "/src/images/copper.jpg"
+        image: "/src/images/copper.webp"
     },
     {
         name: "Silver",
@@ -17,7 +17,7 @@ export const cardList = [
         type: "treasure",
         value: 2,
         quantity: 40,
-        image: "/src/images/silver.jpg"
+        image: "/src/images/silver.webp"
     },
     {
         name: "Gold",
@@ -25,7 +25,7 @@ export const cardList = [
         type: "treasure",
         value: 3,
         quantity: 30,
-        image: "/src/images/gold.jpg"
+        image: "/src/images/gold.webp"
     },
 
     // Victory cards
@@ -35,7 +35,7 @@ export const cardList = [
         type: "victory",
         value: 1,
         quantity: 24,
-        image: "/src/images/estate.jpg"
+        image: "/src/images/estate.webp"
     },
     {
         name: "Duchy",
@@ -43,7 +43,7 @@ export const cardList = [
         type: "victory",
         value: 3,
         quantity: 12,
-        image: "/src/images/duchy.jpg"
+        image: "/src/images/duchy.webp"
     },
     {
         name: "Province",
@@ -51,7 +51,7 @@ export const cardList = [
         type: "victory",
         value: 6,
         quantity: 12,
-        image: "/src/images/province.jpg"
+        image: "/src/images/province.webp"
     },
 
     // Action cards
@@ -60,7 +60,7 @@ export const cardList = [
         cost: 2,
         type: "action",
         quantity: 10,
-        image: "/src/images/cellar.jpg",
+        image: "/src/images/cellar.webp",
         action: () => {
             const playerData = getWhichTurnPlayer();
 
@@ -96,7 +96,7 @@ export const cardList = [
         cost: 5,
         type: "action",
         quantity: 10,
-        image: "/src/images/market.jpg",
+        image: "/src/images/market.webp",
         action: () => {
             //card +1
             drawCardsForCurrentPlayer(1);
@@ -113,7 +113,7 @@ export const cardList = [
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "/src/images/merchant.jpg",
+        image: "/src/images/merchant.webp",
         action: () => {
             // card +1
             drawCardsForCurrentPlayer(1)
@@ -128,7 +128,7 @@ export const cardList = [
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "/src/images/militia.jpg",
+        image: "/src/images/militia.webp",
         action: () => {
             // money +2
             for(let i = 0; i < 2; i++){
@@ -143,7 +143,7 @@ export const cardList = [
         cost: 5,
         type: "action",
         quantity: 10,
-        image: "/src/images/mine.jpg",
+        image: "/src/images/mine.webp",
         action: () => {
             // trash a treasure card
             // copper -> silver
@@ -155,7 +155,7 @@ export const cardList = [
         cost: 2,
         type: "action",
         quantity: 10,
-        image: "/src/images/moat.jpg",
+        image: "/src/images/moat.webp",
         action: () => {
             // card +2
             drawCardsForCurrentPlayer(2)
@@ -167,7 +167,7 @@ export const cardList = [
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "/src/images/remodel.jpg",
+        image: "/src/images/remodel.webp",
         action: () => {
             //trash 'A' card
             // gain a card(up to 'A'cost +2)
@@ -178,7 +178,7 @@ export const cardList = [
         cost: 4,
         type: "action",
         quantity: 10,
-        image: "/src/images/smithy.jpg",
+        image: "/src/images/smithy.webp",
         action: () => {
             drawCardsForCurrentPlayer(3)
         },
@@ -188,7 +188,7 @@ export const cardList = [
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "/src/images/village.jpg",
+        image: "/src/images/village.webp",
         action: () => {
             // card + 1
             drawCardsForCurrentPlayer(1)
@@ -203,7 +203,7 @@ export const cardList = [
         cost: 3,
         type: "action",
         quantity: 10,
-        image: "/src/images/workshop.jpg",
+        image: "/src/images/workshop.webp",
         action: () => {
             //get card up to 4costs (x buy)
         }
