@@ -135,6 +135,10 @@ export const isGameStartable = () => {
 }
 
 export const drawCards = (player, count) => {
+    if (!player.hand) { player.hand = []; }
+    if (!player.deck) { player.deck = []; }
+    if (!player.discard) { player.discard = []; }
+
     for (let i = 0; i < count; i++) {
         // If there are no cards to draw, reshuffle discard pile into deck
         if (player.deck) {
