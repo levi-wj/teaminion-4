@@ -6,6 +6,7 @@
     export let cardsToShow;
     export let finishPickingEvent;
     export let howManyCardsToPick = 0; // If 0, there's no limit on how many cards a user can pick
+    export let mandatory = false;
 
     let cardsClicked = [];
     let dialog;
@@ -56,7 +57,9 @@
         {/each}
     </div>
     <div class="btnRow">
-        <button on:click={closeWindow}>Done</button>
+        {#if !mandatory}
+            <button on:click={closeWindow}>Done</button>
+        {/if}
     </div>
 </dialog>
 

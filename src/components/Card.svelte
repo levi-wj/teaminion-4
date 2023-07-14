@@ -29,7 +29,6 @@
         border-radius: .4em;
         border: 5px solid black;
         transition: transform .15s;
-        transition: margin-bottom 1s, opacity 1s;
     }
 
     img.clickable {
