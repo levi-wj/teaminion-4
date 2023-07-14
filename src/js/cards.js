@@ -121,6 +121,9 @@ export const cardList = [
             // action +1 
             addAction();
             // option: the first time you play a silver this turn money+=1
+        },
+        afterActionPhase: () => {
+            console.log("you made it dad!")
             merchantSkill();
         }
     },
@@ -282,7 +285,7 @@ const militiaID = getCardID('Militia');
 
 export const startingDeck = [
      // Seven Coppers
-    cellarID, militiaID, militiaID, militiaID, militiaID, militiaID, militiaID,
+    cellarID, militiaID, silverID, silverID, merchantID, merchantID, merchantID,
     // Three Estates
     cellarID, cellarID, cellarID,
 ];

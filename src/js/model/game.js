@@ -110,7 +110,12 @@ export const startTurn = () => {
 
 export const startBuyPhase = () => {
     let player = getWhichTurnPlayer();
-
+    gameData.cardsInPlay.forEach(cardID => {
+        const card = cardList[cardID];
+        if (card.type === 'action' && card.afterActionPhase !== undefined) {
+            card.afterActionPhase();
+        }
+    })
     // Add up the player's money!
     player.hand.forEach(cardID => {
         const card = cardList[cardID];
@@ -120,7 +125,7 @@ export const startBuyPhase = () => {
     });
 
     pushGameDataToDB({ phase: 'buy'});
-    pushPlayerDataToDB({ money: player.money });
+    pushPlayerDataToDB(gameData.playerTurn ,{ money: player.money });
 }
 
 export const endTurn = () => {
@@ -301,12 +306,13 @@ export const gainCard = (cardID) => {
 
 export const merchantSkill = () => {
     let player = getWhichTurnPlayer();
-    player.hand.forEach(element => {
+    player.hand.some(element => {
         // silver
         if(element == 1){
-            return player.money++;
+            player.money++
+            return true;
         }else{
-            return;
+            return false;
         }
     });
 }
