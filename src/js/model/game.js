@@ -9,6 +9,8 @@ import { draw } from "svelte/transition";
 
 let matchID;
 let gameData;
+let handledCards = [];
+let hasGotFirstUpdate = false;
 matchData.subscribe((value) => {
     gameData = value;
 });
@@ -23,12 +25,39 @@ export const startGameListeners = (id) => {
     // Updates the matchData store
     onValue(matchesRef, (res) => {
         const data = res.val();
+        if (hasGotFirstUpdate) {
+            handleOtherPlayerActions(data);
+        } else {
+            handledCards = data.cardsInPlay ?? [];
+        }
         matchData.set(data);
+        hasGotFirstUpdate = true;
     });
 }
 
-export const pushPlayerDataToDB = (playerData) => {
-    const playerRef = ref(db, `matches/${matchID}/players/${gameData.playerTurn}`);
+const handleOtherPlayerActions = (newMatchData) => {
+    if (playerID !== newMatchData.playerTurn) {
+        let newCards = newMatchData.cardsInPlay;
+        if (newCards && newCards.length > 0) {
+            let newCardID = newCards[newCards.length - 1];
+            let newCardData = cardList[newCardID];
+            let hasChanged = !newCards.every((value, index) => value === handledCards[index]);
+            if (hasChanged) {
+                handledCards.push(newCardID);
+                if (newCardData.otherPlayersAction) {
+                    newCardData.otherPlayersAction();
+                }
+            }
+        } else {
+            handledCards = [];
+        }
+    }
+}
+
+
+export const pushPlayerDataToDB = (playerID, playerData) => {
+    const updatePlayerID = playerID ?? gameData.playerTurn;
+    const playerRef = ref(db, `matches/${matchID}/players/${updatePlayerID}`);
     const updateData = playerData ?? getWhichTurnPlayer();
 
     return update(playerRef, updateData);
@@ -76,7 +105,7 @@ export const startTurn = () => {
     };
 
     pushGameDataToDB(matchData);
-    pushPlayerDataToDB(playerData);
+    pushPlayerDataToDB(gameData.playerTurn, playerData);
 }
 
 export const startBuyPhase = () => {
@@ -113,7 +142,7 @@ export const endTurn = () => {
     player.hand = [];
     drawCards(player, 5);
 
-    pushPlayerDataToDB(player);
+    pushPlayerDataToDB(gameData.playerTurn, player);
 
     // Start the turn for the next player
     gameData.playerTurn = getNextPlayerTurn();
@@ -135,9 +164,7 @@ export const isGameStartable = () => {
 }
 
 export const drawCards = (player, count) => {
-    if (!player.hand) { player.hand = []; }
-    if (!player.deck) { player.deck = []; }
-    if (!player.discard) { player.discard = []; }
+    prepPlayerData(player);
 
     for (let i = 0; i < count; i++) {
         // If there are no cards to draw, reshuffle discard pile into deck
@@ -157,14 +184,17 @@ export const drawCards = (player, count) => {
     }
 }
 
-export const discardCards = (cards) => {
-    let player = getWhichTurnPlayer();
+export const discardCards = (playerID, cards) => {
+    let player = gameData.players[playerID];
+    prepPlayerData(player);
 
     // Iterate through the cards to discard backwards so that the indexes don't change
     for (let i = cards.length - 1; i >= 0; i--) {
         player.hand.splice(cards[i].handIndex, 1);
         player.discard.push(cards[i].cardID);
     }
+
+    return player.hand;
 }
 
 export const trashCards = (cards) => {
@@ -197,22 +227,32 @@ export const playCard = async (cardID, posInHand, cardData) => {
             gameData.cardsInPlay = [];
         }
         gameData.cardsInPlay.push(cardID);
+        pushGameDataToDB();
 
         // Do the action specific to this card
         cardData.action();
     }
-
-    pushGameDataToDB();
 }
 
 export const getWhichTurnPlayer = () => {
     let player = gameData.players[gameData.playerTurn];
+    prepPlayerData(player);
 
+    return player;
+}
+
+export const getLocalPlayer = () => {
+    return gameData.players[playerID];
+}
+
+export const playerHasCardInHand = (player, cardID) => {
+    return player.hand.includes(cardID);
+}
+
+export const prepPlayerData = player => {
     if (!player.hand) { player.hand = []; }
     if (!player.deck) { player.deck = []; }
     if (!player.discard) { player.discard = []; }
-
-    return player;
 }
 
 // get one more action
@@ -271,18 +311,12 @@ export const merchantSkill = () => {
     });
 }
 
-export const mineSkill = () => {
-    let player = getWhichTurnPlayer();
-    //copper -> silver
-    // not finished
-    let selectedCard;
-    if (selectedCard == getCardID('copper')) {
-        return selectedCard = getCardID('silver');
-    } else if(selectedCard == getCardID('silver')) {
-        return selectedCard = getCardID('gold');
-    } else {
-        return;
-    }
+export const doActionOnOtherPlayers = (action) => {
+    // Get players that aren't the current player
+    let otherPlayers = Object.keys(gameData.players).filter(playerID => playerID !== gameData.playerTurn);
+    otherPlayers.forEach(playerID => {
+        action(playerID);
+    });
 }
 
 export function leaveGame() {

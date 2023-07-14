@@ -1,5 +1,6 @@
-import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB, trashCards, gainCard } from "./model/game";
+import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB, trashCards, gainCard, doActionOnOtherPlayers, getLocalPlayer, playerHasCardInHand } from "./model/game";
 import PickerWindow from '../components/PickerWindow.svelte';
+import { playerID } from "./firebase";
 
 export const cardList = [
     // Treasure cards
@@ -69,7 +70,7 @@ export const cardList = [
 
             function discardAndDraw(discardedCards) {
                 // Discard all selected cards
-                discardCards(discardedCards);
+                discardCards(playerID, discardedCards);
 
                 // Draw as many cards as we discarded
                 drawCardsForCurrentPlayer(discardedCards.length);
@@ -134,8 +135,35 @@ export const cardList = [
             for(let i = 0; i < 2; i++){
                 addMoney();
             }
-            
-            // other players' cards discards down to 3 cards in hand
+            pushPlayerDataToDB();
+        },
+        otherPlayersAction: () => {
+            let player = getLocalPlayer();
+            const discardCount = Math.abs(3 - player.hand.length);
+
+            function discardAndUpdate (pickedCards) {
+                let newHand = discardCards(playerID, pickedCards);
+                pushPlayerDataToDB(playerID, { hand: newHand });
+            }
+
+            if (!playerHasCardInHand(player, getCardID('Moat'))) {
+                if (discardCount > 0) {
+                    new PickerWindow({
+                        // Create the window as a child of the root <html> element
+                        target: document.documentElement,
+                        props: {
+                            windowTitle: 'Discard down to 3 cards in hand',
+                            cardsToShow: player.hand,
+                            // This function will get called when all the cards have been picked
+                            finishPickingEvent: discardAndUpdate,
+                            howManyCardsToPick: discardCount,
+                            mandatory: true,
+                        }
+                    });
+                }
+            } else {
+                // Show the user that they were protected by a Moat
+            }
         }
     },
     { // 10
@@ -249,21 +277,22 @@ const silverID = getCardID('Silver');
 const merchantID = getCardID('Merchant');
 const cellarID = getCardID('Cellar');
 const mineID = getCardID('Mine');
+const militiaID = getCardID('Militia');
 
-
-// export const startingDeck = [
-//      // Seven Coppers
-//     copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-//     // Three Estates
-//     estateID, estateID, estateID,
-// ];
 
 export const startingDeck = [
-    // Seven Coppers
-   copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-   // Three Estates
-   estateID, estateID, estateID,
+     // Seven Coppers
+    cellarID, militiaID, militiaID, militiaID, militiaID, militiaID, militiaID,
+    // Three Estates
+    cellarID, cellarID, cellarID,
 ];
+
+// export const startingDeck = [
+//     // Seven Coppers
+//    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+//    // Three Estates
+//    estateID, estateID, estateID,
+// ];
 
 export const getQuantities = () => {
     const quantities = [];
