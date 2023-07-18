@@ -154,7 +154,6 @@
         background-color: var(--primary-light);
         border-radius: .6em;
         border: none;
-        /* border: 5px solid var(--primary); */
         color: var(--primary);
     }
 </style>

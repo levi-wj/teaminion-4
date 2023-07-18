@@ -1,4 +1,4 @@
-import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB, trashCards, gainCard, doActionOnOtherPlayers, getLocalPlayer, playerHasCardInHand } from "./model/game";
+import { drawCardsForCurrentPlayer, addAction, addBuy, addMoney, getWhichTurnPlayer, merchantSkill, discardCards, pushPlayerDataToDB, trashCards, gainCard, doActionOnOtherPlayers, getLocalPlayer, playerHasCardInHand, getFilteredCardListByValue, getCardsLeft, pushGameDataToDB } from "./model/game";
 import PickerWindow from '../components/PickerWindow.svelte';
 import { playerID } from "./firebase";
 
@@ -123,7 +123,8 @@ export const cardList = [
             // option: the first time you play a silver this turn money+=1
         },
         afterActionPhase: () => {
-            console.log("you made it dad!")
+            // console.log("you made it dad!")
+            // why, justyn, why （；へ：）
             merchantSkill();
         }
     },
@@ -144,7 +145,7 @@ export const cardList = [
             let player = getLocalPlayer();
             const discardCount = Math.abs(3 - player.hand.length);
 
-            function discardAndUpdate (pickedCards) {
+            function discardAndUpdate(pickedCards) {
                 let newHand = discardCards(playerID, pickedCards);
                 pushPlayerDataToDB(playerID, { hand: newHand });
             }
@@ -196,7 +197,7 @@ export const cardList = [
                 // Create the window as a child of the root <html> element
                 target: document.documentElement,
                 props: {
-                    windowTitle: 'Pick a treasure to upgrade I guess',
+                    windowTitle: 'Pick a treasure to upgrade',
                     cardsToShow: playerData.hand.filter(cardID => {
                         const cardData = cardList[cardID];
                         return (cardData.type == "treasure" && cardData.value !== 3)
@@ -263,7 +264,23 @@ export const cardList = [
         quantity: 10,
         image: "/src/images/workshop.webp",
         action: () => {
-            //get card up to 4costs (x buy)
+            // get card up to 4costs (x buy)
+            new PickerWindow({
+                // Create the window as a child of the root <html> element
+                target: document.documentElement,
+                props: {
+                    windowTitle: 'Chose one card',
+                    cardsToShow: getFilteredCardListByValue(4),
+                    finishPickingEvent: (pickedCards) => {
+                        pickedCards.forEach(card => {
+                            gainCard(card.cardID);
+                        });
+                        pushPlayerDataToDB();
+                    },
+                    howManyCardsToPick: 1,
+                    mandatory: true,
+                }
+            });
         }
     },
 ];
@@ -281,21 +298,22 @@ const merchantID = getCardID('Merchant');
 const cellarID = getCardID('Cellar');
 const mineID = getCardID('Mine');
 const militiaID = getCardID('Militia');
+const workshopID = getCardID('Workshop');
 
-
-export const startingDeck = [
-     // Seven Coppers
-    cellarID, militiaID, silverID, silverID, merchantID, merchantID, merchantID,
-    // Three Estates
-    cellarID, cellarID, cellarID,
-];
 
 // export const startingDeck = [
 //     // Seven Coppers
-//    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+//    workshopID, workshopID, workshopID, workshopID, workshopID, workshopID, workshopID,
 //    // Three Estates
 //    estateID, estateID, estateID,
 // ];
+
+export const startingDeck = [
+    // Seven Coppers
+   copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+   // Three Estates
+   estateID, estateID, estateID,
+];
 
 export const getQuantities = () => {
     const quantities = [];

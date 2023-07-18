@@ -61,7 +61,6 @@
         <dialog id="buyWindow" bind:this={buyWindow} open>
             
             <div>
-                <!-- money={playerData.money ?? 0}  -->
                 <Buy cards={gameData.cardsLeft} playerData={playerData}/>
             </div>
         </dialog>
@@ -82,8 +81,8 @@
         background-color: var(--primary-light);
         border-radius: .6em;
         border: none;
-        /* border: 5px solid var(--primary); */
         color: var(--primary);
+        margin-top: 10vh;
     }
 
     dialog div {
