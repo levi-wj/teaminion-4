@@ -19,7 +19,7 @@
     <div class="hand">
         {#each hand as cardID, handIndex}
             <div transition:fade>
-                <Card {cardID} disabled={canPlayCards === false} click={() => clickCard(cardID, handIndex)} clickTransition='slideup' />
+                <Card {cardID} disabled={canPlayCards === false} click={() => clickCard(cardID, handIndex)} />
             </div>
         {/each}
     </div>

@@ -110,12 +110,15 @@ export const startTurn = () => {
 
 export const startBuyPhase = () => {
     let player = getWhichTurnPlayer();
-    gameData.cardsInPlay.forEach(cardID => {
-        const card = cardList[cardID];
-        if (card.type === 'action' && card.afterActionPhase !== undefined) {
-            card.afterActionPhase();
-        }
-    })
+    // if there are cards in play, do actions and after actions
+    if (gameData.cardsInPlay) {
+        gameData.cardsInPlay.forEach(cardID => {
+            const card = cardList[cardID];
+            if (card.type === 'action' && card.afterActionPhase !== undefined) {
+                card.afterActionPhase();
+            }
+        });
+    }
     // Add up the player's money!
     player.hand.forEach(cardID => {
         const card = cardList[cardID];
@@ -302,6 +305,24 @@ export const buyCard = (cardID) => {
 export const gainCard = (cardID) => {
     let player = getWhichTurnPlayer();
     player.discard.push(cardID);
+}
+
+export const getCardsLeft = () => {
+    let cardsLeft = gameData.cardsLeft;
+    return Object.keys(cardsLeft).filter(cardID => {
+        return cardsLeft[cardID] > 0;
+    });
+}
+
+// return cards left that are less than a specified value
+export const getFilteredCardListByValue = (value) => {
+    let newList = [];
+    getCardsLeft().forEach(cardID => {
+        if (cardList[cardID].cost <= value) {
+            newList.push(cardID);
+        }
+    });
+    return newList;
 }
 
 export const merchantSkill = () => {

@@ -39,6 +39,7 @@
 
     .shmunny {
         color: black;
+        position: relative;
         
         font-family: serif;
         font-weight: bold;
@@ -65,5 +66,15 @@
         border: 2px solid white;
         padding: 10px calc(10px + .4em);
         border-radius: 100%;
+    }
+
+    @media screen and (max-width: 900px) {
+        .buyGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            max-height: 57vh;
+            overflow: scroll;
+        }
     }
 </style>

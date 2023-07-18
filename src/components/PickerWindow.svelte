@@ -70,7 +70,7 @@
         top: calc(50vh - 30em);
         border-radius: 10px;
         background-color: var(--primary-light);
-        border: 3px solid var(--primary)
+        border: 3px solid var(--primary);
     }
 
     dialog::backdrop {
@@ -80,6 +80,10 @@
     .pickFlex {
         display: flex;
         justify-content: space-around;
+        flex-wrap: wrap;
+        max-width: 80vw;
+        max-height: 60vh;
+        overflow: scroll;
         background-color: var(--primary);
         border-radius: 10px;
         padding: .5em;

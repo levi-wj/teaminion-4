@@ -19,7 +19,8 @@
     {#if isPlayerLeader(gameData)}
         <h3>You are the match leader</h3>
         <!--
-            We put gameData in this if statement instead of just isGameStartable() to force svelte to re-run the isGameStartable function when gameData updates
+            We put gameData in this if statement instead of just isGameStartable() 
+            to force svelte to re-run the isGameStartable function when gameData updates
             I hope there's a better way to do this but I sure don't know it
         -->
         {#if gameData && isGameStartable()}
