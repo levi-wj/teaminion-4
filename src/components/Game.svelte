@@ -10,6 +10,7 @@
     import Hand from "./Hand.svelte";
     import CardsInPlay from "./CardsInPlay.svelte";
     import NextPhaseButton from "./NextPhaseButton.svelte";
+    import WinMessage  from "./WinMessage.svelte";
 
 
     let buyWindow;
@@ -39,25 +40,29 @@
 {#if gameData}
     {#if gameData.started}
         <div class="game">
-            <PlayersHeader players={gameData.players} playerTurn={gameData.playerTurn} />
+            <PlayersHeader players={gameData.players} playerTurn={gameData.playerTurn} playerWon={gameData.winner !== undefined} />
             <button class="leave" on:click={leaveGame}><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
 
-            {#if gameData.phase === 'action'}
-                <CardsInPlay cards={gameData.cardsInPlay} />
-            {/if}
+            {#if gameData.winner}
+                <WinMessage winningPlayer={gameData.winner}/>
+            {:else}
+                {#if gameData.phase === 'action'}
+                    <CardsInPlay cards={gameData.cardsInPlay} />
+                {/if}
 
-            {#if isMyTurn}
-                <NextPhaseButton currentPhase={gameData.phase} />
-            {/if}
+                {#if isMyTurn}
+                    <NextPhaseButton currentPhase={gameData.phase} />
+                {/if}
 
-            <Hand hand={playerData.hand} canPlayCards={isMyTurn && playerData.actions > 0}/>
+                <Hand hand={playerData.hand} canPlayCards={isMyTurn && playerData.actions > 0}/>
+            {/if}
         </div>
     {:else}
         <!-- Handle if the game hasn't started yet -->
         <GameLobby {gameData} />
     {/if}
 
-    {#if isMyTurn && gameData.phase === 'buy'}
+    {#if isMyTurn && gameData.phase === 'buy' && !gameData.winner}
         <dialog id="buyWindow" bind:this={buyWindow} open>
             
             <div>
