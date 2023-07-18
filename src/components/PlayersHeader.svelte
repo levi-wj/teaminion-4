@@ -1,12 +1,13 @@
 <script>
     export let players; // List of players, each with a nickname, id, gold, and actions
     export let playerTurn; // Player ID
+    export let playerWon = false;
 </script>
 
 {#if players}
     <div class="header">
     {#each Object.entries(players) as [id, player]}
-        {#if id == playerTurn}
+        {#if id == playerTurn && playerWon==false}
             <div class="player player--current">
                 <div class="player__items">
                     <div><i class="fa fa-bolt"></i> - {player.actions ?? 0}</div>
@@ -17,8 +18,12 @@
         {:else}
             <div class="player">
                 <div class="player__name">{player.nickname}</div>
+                {#if playerWon === true}
+                    <span><i class="fa fa-star"></i> - {player.victory}</span>
+                {/if}
             </div>
         {/if}
+        
     {/each}
     </div>
 {/if}

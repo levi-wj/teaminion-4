@@ -284,8 +284,57 @@ export const addMoney = () => {
     return money;
 }
 
+const reduceCardsLeft = (cardID) => {
+    gameData.cardsLeft[cardID] -= 1;
+    if (checkGameEnd()) {
+        endGame();
+    }
+}
+
+const endGame = () => {
+    let highestScore = 0;
+    let winningPlayer;
+    for (const [playerID, playerData] of Object.entries(gameData.players)) {
+        let playerScore = 0;
+        prepPlayerData(playerData);
+        const allCards = [...playerData.hand, ...playerData.discard, ...playerData.deck];
+        allCards.forEach(cardID => {
+            const currentCard = cardList[cardID];
+            if (currentCard.type === "victory") {
+                playerScore += currentCard.value;
+            }
+        });
+        playerData.victory = playerScore;
+        if (playerScore > highestScore){
+            highestScore = playerScore;
+            winningPlayer = playerID;
+        }
+    }
+    gameData.winner = winningPlayer;
+    pushGameDataToDB();
+}
+
+const checkGameEnd = () => {
+    let emptyStacks = 0;
+    let isVictoryEmpty = false;
+    Object.keys(gameData.cardsLeft).forEach(cardID => {
+        if (gameData.cardsLeft[cardID] === 0) {
+            emptyStacks++;
+            if (cardList[cardID].type === "victory"){
+                isVictoryEmpty = true;
+            }
+        }
+    });
+    if (emptyStacks >= 3 || isVictoryEmpty) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // buy a card
 export const buyCard = (cardID) => {
+    console.log("buyCard called")
     let player = getWhichTurnPlayer();
     let card = cardList[cardID];
     if (!player.discard) {
@@ -296,14 +345,16 @@ export const buyCard = (cardID) => {
             player.money -= card.cost;
             player.buys--;
             player.discard.push(cardID);
-            gameData.cardsLeft[cardID]--;
-            matchData.set(gameData);
+            reduceCardsLeft(cardID);
+            pushGameDataToDB();
         }
     }
 }
 
 export const gainCard = (cardID) => {
+    console.log("gainCard called")
     let player = getWhichTurnPlayer();
+    reduceCardsLeft(cardID);
     player.discard.push(cardID);
 }
 
