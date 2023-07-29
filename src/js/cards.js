@@ -339,19 +339,19 @@ const workshopID = getCardID('Workshop');
 const remodelID = getCardID('Remodel');
 
 
-export const startingDeck = [
-    // Seven Coppers
-    copperID, workshopID, mineID, merchantID, silverID, estateID, smithyID,
-    // Three Estates
-    militiaID, militiaID, militiaID,
-];
-
 // export const startingDeck = [
 //     // Seven Coppers
-//    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-//    // Three Estates
-//    estateID, estateID, estateID,
+//     copperID, workshopID, mineID, merchantID, silverID, estateID, smithyID,
+//     // Three Estates
+//     militiaID, militiaID, militiaID,
 // ];
+
+export const startingDeck = [
+    // Seven Coppers
+   copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+   // Three Estates
+   estateID, estateID, estateID,
+];
 
 export const getQuantities = () => {
     const quantities = [];
