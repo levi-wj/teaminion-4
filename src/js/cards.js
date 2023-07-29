@@ -230,6 +230,41 @@ export const cardList = [
         action: () => {
             //trash 'A' card
             // gain a card(up to 'A'cost +2)
+            const playerData = getWhichTurnPlayer();
+
+            function trashAndGain(list) {
+                if (list.length > 0) {
+                    // Trash the card
+                    const trashCard = list[0].cardID;
+                    trashCards(list);
+
+                    // Show the user a window to pick a card to gain
+                    new PickerWindow({
+                        target: document.documentElement,
+                        props: {
+                            windowTitle: 'Pick a card to gain',
+                            // Filter the cards down to the ones that cost less than the card we trashed + 2
+                            cardsToShow: getFilteredCardListByValue(cardList[trashCard].cost + 2),
+                            finishPickingEvent: (list) => {
+                                gainCard(list[0].cardID);
+                                pushPlayerDataToDB();
+                            },
+                            howManyCardsToPick: 1,
+                            mandatory: true,
+                        }
+                    });
+                }
+            }
+
+            new PickerWindow({
+                target: document.documentElement,
+                props: {
+                    windowTitle: 'Pick a card to trash',
+                    cardsToShow: playerData.hand,
+                    finishPickingEvent: trashAndGain,
+                    howManyCardsToPick: 1,
+                }
+            });
         }
     },
     { // 13
@@ -299,21 +334,22 @@ const cellarID = getCardID('Cellar');
 const mineID = getCardID('Mine');
 const militiaID = getCardID('Militia');
 const workshopID = getCardID('Workshop');
+const remodelID = getCardID('Remodel');
 
-
-// export const startingDeck = [
-//     // Seven Coppers
-//    workshopID, workshopID, workshopID, workshopID, workshopID, workshopID, workshopID,
-//    // Three Estates
-//    estateID, estateID, estateID,
-// ];
 
 export const startingDeck = [
     // Seven Coppers
-   copperID, copperID, copperID, copperID, copperID, copperID, copperID,
-   // Three Estates
-   estateID, estateID, estateID,
+    remodelID, remodelID, remodelID, remodelID, remodelID, remodelID, remodelID,
+    // Three Estates
+    cellarID, cellarID, cellarID,
 ];
+
+// export const startingDeck = [
+//     // Seven Coppers
+//    copperID, copperID, copperID, copperID, copperID, copperID, copperID,
+//    // Three Estates
+//    estateID, estateID, estateID,
+// ];
 
 export const getQuantities = () => {
     const quantities = [];
