@@ -192,17 +192,17 @@ export const drawCards = (player, count) => {
     }
 }
 
-export const discardCards = (playerID, cards) => {
-    let player = gameData.players[playerID];
+export const discardCards = (player, cards) => {
     prepPlayerData(player);
+
+    // Order cards by hand index (so that the indexes don't change when we remove cards)
+    cards.sort((a, b) => a.handIndex - b.handIndex);
 
     // Iterate through the cards to discard backwards so that the indexes don't change
     for (let i = cards.length - 1; i >= 0; i--) {
         player.hand.splice(cards[i].handIndex, 1);
         player.discard.push(cards[i].cardID);
     }
-
-    return player.hand;
 }
 
 export const trashCards = (cards) => {
@@ -334,7 +334,6 @@ const checkGameEnd = () => {
 
 // buy a card
 export const buyCard = (cardID) => {
-    console.log("buyCard called")
     let player = getWhichTurnPlayer();
     let card = cardList[cardID];
     if (!player.discard) {
@@ -352,7 +351,6 @@ export const buyCard = (cardID) => {
 }
 
 export const gainCard = (cardID) => {
-    console.log("gainCard called")
     let player = getWhichTurnPlayer();
     reduceCardsLeft(cardID);
     player.discard.push(cardID);

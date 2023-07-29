@@ -70,7 +70,7 @@ export const cardList = [
 
             function discardAndDraw(discardedCards) {
                 // Discard all selected cards
-                discardCards(playerID, discardedCards);
+                discardCards(playerData, discardedCards);
 
                 // Draw as many cards as we discarded
                 drawCardsForCurrentPlayer(discardedCards.length);
@@ -146,8 +146,8 @@ export const cardList = [
             const discardCount = Math.abs(3 - player.hand.length);
 
             function discardAndUpdate(pickedCards) {
-                let newHand = discardCards(playerID, pickedCards);
-                pushPlayerDataToDB(playerID, { hand: newHand });
+                discardCards(player, pickedCards);
+                pushPlayerDataToDB(playerID, { hand: player.hand, discard: player.discard });
             }
 
             if (!playerHasCardInHand(player, getCardID('Moat'))) {
@@ -181,6 +181,7 @@ export const cardList = [
             // copper -> silver
             // silver -> gold
             const playerData = getWhichTurnPlayer();
+
             function trashAndUpgrade(list) {
                 if (list.length > 0) {
                     const trashCard = list[0].cardID;
@@ -193,6 +194,7 @@ export const cardList = [
                     pushPlayerDataToDB();
                 }
             }
+
             new PickerWindow({
                 // Create the window as a child of the root <html> element
                 target: document.documentElement,
@@ -245,8 +247,8 @@ export const cardList = [
                             windowTitle: 'Pick a card to gain',
                             // Filter the cards down to the ones that cost less than the card we trashed + 2
                             cardsToShow: getFilteredCardListByValue(cardList[trashCard].cost + 2),
-                            finishPickingEvent: (list) => {
-                                gainCard(list[0].cardID);
+                            finishPickingEvent: (pickedCards) => {
+                                gainCard(pickedCards[0].cardID);
                                 pushPlayerDataToDB();
                             },
                             howManyCardsToPick: 1,
@@ -339,9 +341,9 @@ const remodelID = getCardID('Remodel');
 
 export const startingDeck = [
     // Seven Coppers
-    remodelID, remodelID, remodelID, remodelID, remodelID, remodelID, remodelID,
+    copperID, workshopID, mineID, merchantID, silverID, estateID, smithyID,
     // Three Estates
-    cellarID, cellarID, cellarID,
+    militiaID, militiaID, militiaID,
 ];
 
 // export const startingDeck = [
